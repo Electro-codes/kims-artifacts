@@ -1,8 +1,8 @@
 package net.keb4.kimsartifacts.event;
 
 
+import net.keb4.kimsartifacts.config.Config;
 import net.keb4.kimsartifacts.item.ItemRegistry;
-import net.keb4.kimsartifacts.Config;
 import net.keb4.kimsartifacts.world.ArtifactGenData;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.server.ServerStartingEvent;

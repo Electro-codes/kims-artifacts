@@ -1,5 +1,6 @@
-package net.keb4.kimsartifacts;
+package net.keb4.kimsartifacts.config;
 
+import net.keb4.kimsartifacts.Main;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
