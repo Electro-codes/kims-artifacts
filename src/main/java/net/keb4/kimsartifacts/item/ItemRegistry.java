@@ -1,4 +1,4 @@
-package net.keb4.item;
+package net.keb4.kimsartifacts.item;
 
 import net.keb4.kimsartifacts.Main;
 import net.minecraft.world.item.Item;

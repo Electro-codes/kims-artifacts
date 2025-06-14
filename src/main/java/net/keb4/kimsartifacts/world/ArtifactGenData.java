@@ -1,8 +1,7 @@
-package net.keb4.world;
+package net.keb4.kimsartifacts.world;
 
 import net.keb4.kimsartifacts.Config;
 import net.keb4.kimsartifacts.Main;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class ArtifactGenData extends SavedData {
 
