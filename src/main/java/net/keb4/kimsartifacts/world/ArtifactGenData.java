@@ -1,6 +1,6 @@
 package net.keb4.kimsartifacts.world;
 
-import net.keb4.kimsartifacts.Config;
+import net.keb4.kimsartifacts.config.Config;
 import net.keb4.kimsartifacts.Main;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
