@@ -49,6 +49,11 @@ public class Main
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+
+
+
+
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -72,7 +77,6 @@ public class Main
 
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
 
