@@ -18,6 +18,7 @@ public class ItemRegistry {
     // Have a look into it, since im calling the super constructor there once i call the constructor of smrItem it automatically does what it used to do here!
     public static final RegistryObject<Item> TEST_ITEM = ITEMS.register("test", () -> new Item(new Item.Properties().stacksTo(1).fireResistant().defaultDurability(0)));
     public static final RegistryObject<Item> SMR_ITEM = ITEMS.register("smr", () -> new smrItem());
+    
 
 
     public static void register(IEventBus bus)

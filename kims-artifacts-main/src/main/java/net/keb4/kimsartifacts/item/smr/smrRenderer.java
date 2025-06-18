@@ -16,7 +16,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class smrRenderer implements ICurioRenderer {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("kimsartifacts", "item/curiochestplateartifact.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("kimsartifacts", "textures/item/curiochestplateartifact.png");
     @SuppressWarnings("rawtypes")
     private final smrModel model;
 

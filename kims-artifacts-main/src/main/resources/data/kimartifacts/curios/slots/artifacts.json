@@ -1,6 +1,6 @@
 {
   "order": 20,
   "size": 1,
-  "icon": "kimsartifacts:gui/slots/artifact.png",
+  "icon": "kimsartifacts:slot/artifact",
   "add_cosmetic": true
 }
