@@ -1,9 +1,14 @@
-package net.keb4.kimsartifacts;
+package net.keb4.kims_artifacts;
 
 import com.mojang.logging.LogUtils;
-import net.keb4.kimsartifacts.item.ItemRegistry;
+import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
+import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
+import net.keb4.kims_artifacts.entity.damage.DamageTypes;
+import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -15,6 +20,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Main.MODID)
@@ -33,13 +39,14 @@ public class Main
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::registerLayerDefinitions);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
         //All registration types
         ItemRegistry.register(modEventBus);
-
+        DamageTypes.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -63,6 +70,14 @@ public class Main
 
     }
 
+    private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event)
+    {
+        // This is where you tell Minecraft about the structure of your model
+        // Make sure smrModel.createMesh() returns a LayerDefinition
+        event.registerLayerDefinition(SMRModel.LAYER_LOCATION, SMRModel::createBodyLayer);
+        LOGGER.info("Registered model layer definition for {}", SMRModel.LAYER_LOCATION);
+    }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
@@ -78,9 +93,13 @@ public class Main
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            // Register the smrRenderer to the Curios Renderer Registry
+
+            // Register the smrRenderer for the SMR item
+            CuriosRendererRegistry.register( (Item)(ItemRegistry.SMR_ITEM.get()), SMRRenderer::new);
+
+            // Log a message to indicate that the client setup is complete
+            LOGGER.info("Client setup complete for {}", MODID);
         }
     }
 }

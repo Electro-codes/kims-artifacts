@@ -1,7 +1,7 @@
-package net.keb4.kimsartifacts.world;
+package net.keb4.kims_artifacts.world;
 
-import net.keb4.kimsartifacts.config.Config;
-import net.keb4.kimsartifacts.Main;
+import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -9,12 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ArtifactGenData extends SavedData {
 
@@ -34,20 +31,21 @@ public class ArtifactGenData extends SavedData {
 
 
     private static final String LOCATION = "kartifact_gen_data";
+
     private LinkedHashMap<ResourceLocation, Boolean> generatedItems = new LinkedHashMap<>();
 
 
     /**
-     * Defaults the list of generated items as false.
+     * Defaults the list of generated items as false. Updates on data load.
      * **/
     public void populateItemMap()
     {
         if (generatedItems.isEmpty()) {
-            List<Item> configItems = Config.artifacts;
+            Set<RegistryObject<Item>> configItems = ItemRegistry.getArtifacts();
 
-            for (Item item : configItems) {
+            for (RegistryObject<Item> item : configItems) {
                 //all put as false for now, but will be updated accordingly on world load
-                generatedItems.put(ForgeRegistries.ITEMS.getKey(item), false);
+                generatedItems.put(item.getId(), false);
             }
         }
     }
