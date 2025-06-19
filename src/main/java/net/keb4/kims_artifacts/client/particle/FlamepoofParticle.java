@@ -36,10 +36,11 @@ public class FlamepoofParticle extends TextureSheetParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double vx, double vy, double vz) {
-            FlamepoofParticle p = new FlamepoofParticle(level, x,y,z,vx*6,vy*6,vz*6,sprites);
+            FlamepoofParticle p = new FlamepoofParticle(level, x,y,z,vx,vy,vz,sprites);
             p.pickSprite(this.sprites);
             p.quadSize = 1f + (p.random.nextFloat() * 0.3f);
             p.hasPhysics = true;
+            p.setPower(5);
 
             return p;
         }
