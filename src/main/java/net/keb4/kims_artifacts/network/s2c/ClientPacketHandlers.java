@@ -1,6 +1,7 @@
 package net.keb4.kims_artifacts.network.s2c;
 
 import net.keb4.kims_artifacts.client.util.ParticleHelper;
+import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.client.Minecraft;
@@ -20,9 +21,9 @@ public class ClientPacketHandlers {
         Entity sender = Minecraft.getInstance().level.getEntity(msg.senderID);
         if (sender == null) return;
         if (sender instanceof Player player) {
-            HitResult r = RayUtils.simpleBlockRay(player, 20.0D, false);
-            ParticleHelper.explosion(r.getLocation(), 2.0D,50.0D,5.0D, net.keb4.kims_artifacts.client.particle.ParticleTypes.FLAMEPOOF.get().getType());
-            ParticleHelper.sphere(r.getLocation(), 2.0D,5.0D, net.keb4.kims_artifacts.client.particle.ParticleTypes.FLAMEPOOF.get().getType());
+            HitResult r = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
+            ParticleHelper.explosion(r.getLocation(), 2.0D,50.0D,5.0D, ParticleTypes.POOF);
+            ParticleHelper.sphere(r.getLocation(), 2.0D,5.0D, ParticleTypes.POOF);
             player.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 3f, 0.2f);
         }
     }

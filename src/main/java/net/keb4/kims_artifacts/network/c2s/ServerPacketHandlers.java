@@ -1,7 +1,7 @@
 package net.keb4.kims_artifacts.network.c2s;
 
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
-import net.keb4.kims_artifacts.item.ItemRegistry;
+import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.util.CurioHelper;
@@ -15,8 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.CuriosCapability;
 
 import java.util.function.Supplier;
 
@@ -33,10 +31,7 @@ public class ServerPacketHandlers {
     public static void handleSMRSmallExplosionPacket(SMRWeakExplosionPacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         ServerPlayer player = player(ctx);
-
-
-        if (CurioHelper.getArtifactCurio(player) != ItemStack.EMPTY) {
-            HitResult hit = RayUtils.simpleBlockRay(player, 20D, true);
+            HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
             if (hit.getType() == HitResult.Type.MISS) {
                 return;
             }
@@ -47,16 +42,11 @@ public class ServerPacketHandlers {
 
             server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new EntityBasedExplosionDamageCalculator(player), pos.x, pos.y, pos.z, 5f, false, Level.ExplosionInteraction.TNT);
 
-            for (Player p : player.level().players())
-            {
-                if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange)
-                {
+            for (Player p : player.level().players()) {
+                if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
                     PacketNetwork.sendToPlayer(new SMRWeakExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
                 }
             }
-
-
-        }
     }
 
 

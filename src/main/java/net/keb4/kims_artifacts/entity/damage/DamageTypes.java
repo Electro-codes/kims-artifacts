@@ -21,6 +21,7 @@ public enum DamageTypes {
 
     ARTIFACT(ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(Main.MODID, "artifact")));
 
+
     DamageTypes(ResourceKey<DamageType> type)
     {
         this.type = type;
