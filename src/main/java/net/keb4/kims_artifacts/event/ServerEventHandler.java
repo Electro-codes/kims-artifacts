@@ -1,6 +1,7 @@
 package net.keb4.kims_artifacts.event;
 
 
+import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.item.ArtifactItem;
 import net.keb4.kims_artifacts.world.ArtifactGenData;
 import net.minecraft.world.level.Level;
@@ -22,7 +23,7 @@ public class ServerEventHandler {
     @SubscribeEvent
     public static void onItemStackDespawn(ItemExpireEvent event)
     {
-        if (event.getEntity().getItem().getItem() instanceof ArtifactItem)
+        if (event.getEntity().getItem().getItem() instanceof ArtifactItem && event.getExtraLife() < 6000)
         {
             event.setCanceled(true);
         }

@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -15,7 +16,7 @@ public class SMRItem extends CurioArtifactItem {
 
 
     @Override
-    public Component getDescription() {
+    public @NotNull Component getDescription() {
         MutableComponent component = MutableComponent.create(ComponentContents.EMPTY);
         component.append("Pew pew").withStyle(ChatFormatting.AQUA);
         return component;

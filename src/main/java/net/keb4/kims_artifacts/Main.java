@@ -1,10 +1,12 @@
 package net.keb4.kims_artifacts;
 
 import com.mojang.logging.LogUtils;
+import net.keb4.kims_artifacts.client.keybind.Keybinds;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ItemRegistry;
+import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -46,7 +48,7 @@ public class Main
 
         //All registration types
         ItemRegistry.register(modEventBus);
-        DamageTypes.register(modEventBus);
+        PacketNetwork.register();
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
@@ -93,9 +95,6 @@ public class Main
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Register the smrRenderer to the Curios Renderer Registry
-
-            // Register the smrRenderer for the SMR item
             CuriosRendererRegistry.register( (Item)(ItemRegistry.SMR_ITEM.get()), SMRRenderer::new);
 
             // Log a message to indicate that the client setup is complete
