@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.network;
 
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
+import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,12 @@ public class PacketNetwork {
                 .encoder(SMRWeakExplosionPacket::encode) // Method to write packet data
                 .decoder(SMRWeakExplosionPacket::decode) // Method to read packet data
                 .consumerMainThread(SMRWeakExplosionPacket::handle) // Method to process packet on the main thread
+                .add();
+
+        INSTANCE.messageBuilder(SMRWeakExplosionCallbackPacket.class, id())
+                .encoder(SMRWeakExplosionCallbackPacket::encode) // Method to write packet data
+                .decoder(SMRWeakExplosionCallbackPacket::decode) // Method to read packet data
+                .consumerMainThread(SMRWeakExplosionCallbackPacket::handle) // Method to process packet on the main thread
                 .add();
     }
 

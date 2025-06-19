@@ -23,13 +23,7 @@ public class ClientEventHandler {
     {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null)
         {
-            if (Keybinds.SMR_SMALL_EXPLOSION.consumeClick())
-            {
-                HitResult r = RayUtils.simpleBlockRay(Minecraft.getInstance().player, 20.0D, false);
-                ParticleHelper.sphere(r.getLocation(), 5.0D);
-                PacketNetwork.sendToServer(new SMRWeakExplosionPacket());
-                Minecraft.getInstance().player.sendSystemMessage(MutableComponent.create(ComponentContents.EMPTY).append("pew").withStyle(ChatFormatting.AQUA));
-            }
+            if (Keybinds.SMR_SMALL_EXPLOSION.consumeClick()) PacketNetwork.sendToServer(new SMRWeakExplosionPacket());
         }
     }
 

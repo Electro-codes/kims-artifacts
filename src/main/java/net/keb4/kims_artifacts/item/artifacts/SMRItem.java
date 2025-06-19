@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * **/
 public class SMRItem extends CurioArtifactItem {
 
+    public static final double RAYCAST_RANGE = 20.0D;
+
 
     @Override
     public @NotNull Component getDescription() {

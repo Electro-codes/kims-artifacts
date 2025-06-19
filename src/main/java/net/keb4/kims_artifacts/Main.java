@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts;
 
 import com.mojang.logging.LogUtils;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
+import net.keb4.kims_artifacts.client.particle.ParticleTypes;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -46,6 +47,7 @@ public class Main
         //All registration types
         ItemRegistry.register(modEventBus);
         PacketNetwork.register();
+        ParticleTypes.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
