@@ -1,13 +1,9 @@
 package net.keb4.kims_artifacts.util;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import javax.sound.sampled.Clip;
-
 /**
  * @author Electro
  * @apiNote Contains various raycast utilities.

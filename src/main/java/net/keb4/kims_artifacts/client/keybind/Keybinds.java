@@ -7,12 +7,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.jline.keymap.KeyMap;
 import org.lwjgl.glfw.GLFW;
-
-import javax.swing.text.JTextComponent;
 import java.util.HashSet;
-import java.util.List;
+
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Keybinds {

@@ -1,7 +1,6 @@
 package net.keb4.kims_artifacts.event;
 
 
-import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.item.ArtifactItem;
 import net.keb4.kims_artifacts.world.ArtifactGenData;
 import net.minecraft.world.level.Level;

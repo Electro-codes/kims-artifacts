@@ -9,7 +9,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.ParticleUtils;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -27,7 +26,7 @@ public class ClientEventHandler {
             if (Keybinds.SMR_SMALL_EXPLOSION.consumeClick())
             {
                 HitResult r = RayUtils.simpleBlockRay(Minecraft.getInstance().player, 20.0D, false);
-                ParticleHelper.sphere(r.getLocation());
+                ParticleHelper.sphere(r.getLocation(), Minecraft.getInstance().level);
                 PacketNetwork.sendToServer(new SMRWeakExplosionPacket());
                 Minecraft.getInstance().player.sendSystemMessage(MutableComponent.create(ComponentContents.EMPTY).append("pew").withStyle(ChatFormatting.AQUA));
             }

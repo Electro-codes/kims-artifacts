@@ -1,13 +1,10 @@
 package net.keb4.kims_artifacts;
 
 import com.mojang.logging.LogUtils;
-import net.keb4.kims_artifacts.client.keybind.Keybinds;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
-import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

@@ -1,8 +1,6 @@
 package net.keb4.kims_artifacts.network.c2s;
 
-import net.keb4.kims_artifacts.Main;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
