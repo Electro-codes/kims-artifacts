@@ -19,6 +19,12 @@ public class ParticleHelper {
     public static void sphere(Vec3 center, double radius, double densityConstant, ParticleOptions particleType)
     {
         ClientLevel world = Minecraft.getInstance().level;
+        if (world.isClientSide() == false)
+        {
+            Main.LOGGER.error("Tried to spawn particles on the server side! This is not allowed!");
+            return;
+            
+        }
         int totalParticles = (int) (densityConstant * radius * radius);
         for (int i = 0; i < totalParticles; i++)
         {
@@ -38,6 +44,12 @@ public class ParticleHelper {
     public static void explosion(Vec3 center, double radius,double densityConstant,double force, ParticleOptions particleType)
     {
         ClientLevel world = Minecraft.getInstance().level;
+        if (world.isClientSide() == false)
+        {
+            Main.LOGGER.error("Tried to spawn particles on the server side! This is not allowed!");
+            return;
+            
+        }
         int totalParticles = (int) (densityConstant * radius * radius); // Adjust density as needed
         for (int i = 0; i < totalParticles; i++)
         {

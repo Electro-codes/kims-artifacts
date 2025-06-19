@@ -56,18 +56,24 @@ public class RayUtils {
             }
         }
 
-        EntityHitResult entityHitResult = new EntityHitResult(closestEntity, closestEntity.position());
-
-
-
         BlockHitResult block = player.level().clip(
-                new ClipContext(eyes, end, ClipContext.Block.OUTLINE, (ignoreFluids ? ClipContext.Fluid.NONE : ClipContext.Fluid.ANY), closestEntity));
+                new ClipContext(eyes, end, ClipContext.Block.OUTLINE, (ignoreFluids ? ClipContext.Fluid.NONE : ClipContext.Fluid.ANY), player));
+        if (closestEntity == null)
+        {
+            return block;
+        }
+        EntityHitResult entityHitResult = new EntityHitResult(closestEntity, closestEntity.position());
+        
+
+                
         Main.LOGGER.info("Block rng: {}", block.getLocation().distanceTo(eyes));
         Main.LOGGER.info("Entity rng: {}", entityHitResult.getLocation().distanceTo(eyes));
         if ((entityHitResult.getLocation().distanceTo(eyes) <= block.getLocation().distanceTo(eyes)))
         {
             return entityHitResult;
+        }  else
+        {
+            return block;
         }
-        return block;
     }
 }
