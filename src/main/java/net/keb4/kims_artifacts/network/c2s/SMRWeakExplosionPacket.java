@@ -5,6 +5,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**
+ * @apiNote Example of a client to server packet. No data needs to be written because the server knows what the correct values are (e.x, explosion strength)
+ * **/
 public class SMRWeakExplosionPacket {
 
     public SMRWeakExplosionPacket() {
