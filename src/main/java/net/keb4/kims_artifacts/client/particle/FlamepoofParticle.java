@@ -16,14 +16,14 @@ public class FlamepoofParticle extends TextureSheetParticle {
     @Override
     public void tick() {
         super.tick();
-
+        this.move(this.xd, this.yd, this.zd);
         this.setSpriteFromAge(spriteSet);
     }
 
     @Override
     public ParticleRenderType getRenderType() {
         // Use the standard PARTICLE_SHEET_OPAQUE for most texture-based particles
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
 
@@ -36,7 +36,7 @@ public class FlamepoofParticle extends TextureSheetParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double vx, double vy, double vz) {
-            FlamepoofParticle p = new FlamepoofParticle(level, x,y,z,vx,vy,vz,sprites);
+            FlamepoofParticle p = new FlamepoofParticle(level, x,y,z,vx*6,vy*6,vz*6,sprites);
             p.pickSprite(this.sprites);
             p.quadSize = 1f + (p.random.nextFloat() * 0.3f);
             p.hasPhysics = true;
