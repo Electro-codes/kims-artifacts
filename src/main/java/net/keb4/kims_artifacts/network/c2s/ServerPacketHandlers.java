@@ -74,7 +74,7 @@ public class ServerPacketHandlers {
                     Main.LOGGER.info(String.valueOf(coeff));
                     coeff = coeff < 0.2f ? 0 : coeff;
                     if (coeff > 0) {
-                        PacketNetwork.sendToServer(new ScreenShakePacket(coeff*4, 2, ScreenShakeRenderer.Types.DEFAULT));
+                        PacketNetwork.sendToServer(new ScreenShakePacket(coeff*4, 2, "DEFAULT"));
                     }
                 }
             }

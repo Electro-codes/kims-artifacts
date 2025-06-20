@@ -15,11 +15,11 @@ public class ScreenShakePacket {
     public final ScreenShakeRenderer.Types type;
 
 
-    public ScreenShakePacket(float strength, int duration, ScreenShakeRenderer.Types type)
+    public ScreenShakePacket(float strength, int duration, String type)
     {
         this.strength = strength;
         this.duration = duration;
-        this.type = type;
+        this.type = ScreenShakeRenderer.Types.valueOf(type);
     }
 
     public ScreenShakePacket(FriendlyByteBuf buf)
