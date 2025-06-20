@@ -1,7 +1,11 @@
 package net.keb4.kims_artifacts.network.s2c;
 
+import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
 import net.keb4.kims_artifacts.client.util.ParticleHelper;
+import net.keb4.kims_artifacts.entity.capability.CapRegistry;
+import net.keb4.kims_artifacts.entity.capability.IArtifactPlayerCap;
+import net.keb4.kims_artifacts.entity.capability.PlayerArtifactCapability;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
@@ -58,4 +62,11 @@ public class ClientPacketHandlers {
         ScreenShakeRenderer.shakeScreen(msg.duration, msg.strength, msg.type);
     }
 
+    public static void handleResonanceSyncPacket(ResonanceSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        IArtifactPlayerCap cap = Minecraft.getInstance().player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get();
+        PlayerArtifactCapability newCap = new PlayerArtifactCapability(message.resonanceValues, message.initialized);
+        Main.LOGGER.info("syncing resonance...: ");
+       cap.copyFrom(newCap);
+    }
 }
