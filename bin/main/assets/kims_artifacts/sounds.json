@@ -1,0 +1,67 @@
+{
+  "smr_equip": {
+    "sounds": [
+      {
+        "name": "kims_artifacts:smr_equip",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "weight": 1
+      }
+    ],
+    "subtitle": "subtitles.kims_artifacts.smr_equip",
+    "category": "player",
+    "attenuation_distance": 16
+  },
+  "smr_switch_weak": {
+    "sounds": [
+      {
+        "name": "kims_artifacts:smr_switch_weak",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "weight": 1
+      }
+    ],
+    "subtitle": "subtitles.kims_artifacts.smr_switch_weak",
+    "category": "player",
+    "attenuation_distance": 16
+  },
+  "smr_switch_strong": {
+    "sounds": [
+      {
+        "name": "kims_artifacts:smr_switch_strong",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "weight": 1
+      }
+    ],
+    "subtitle": "subtitles.kims_artifacts.smr_switch_strong",
+    "category": "player",
+    "attenuation_distance": 16
+  },
+  "smr_weakshot": {
+    "sounds": [
+      {
+        "name": "kims_artifacts:smr_weakshot",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "weight": 1
+      }
+    ],
+    "subtitle": "subtitles.kims_artifacts.smr_weakshot",
+    "category": "player",
+    "attenuation_distance": 64
+  },
+  "smr_strongshot": {
+    "sounds": [
+      {
+        "name": "kims_artifacts:smr_strongshot",
+        "volume": 0.9,
+        "pitch": 1.0,
+        "weight": 1
+      }
+    ],
+    "subtitle": "subtitles.kims_artifacts.smr_strongshot",
+    "category": "player",
+    "attenuation_distance": 128
+  }
+}
