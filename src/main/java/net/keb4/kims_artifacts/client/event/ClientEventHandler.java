@@ -5,6 +5,7 @@ import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.keb4.kims_artifacts.network.c2s.SMRStrongExplosionPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
+import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.keb4.kims_artifacts.util.CurioHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.sounds.SoundEvents;
@@ -21,9 +22,25 @@ public class ClientEventHandler {
     {
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().level != null)
         {
-            if (Keybinds.SMR_SWITCH.consumeClick() && CurioHelper.getArtifactCurio(Minecraft.getInstance().player).getItem() instanceof SMRItem) {Keybinds.SMR_strongSelected = !Keybinds.SMR_strongSelected; Minecraft.getInstance().player.playSound(SoundEvents.AMETHYST_BLOCK_CHIME);}
+            if (Keybinds.SMR_SWITCH.consumeClick() && CurioHelper.getArtifactCurio(Minecraft.getInstance().player).getItem() instanceof SMRItem)
+            {
+                Keybinds.SMR_strongSelected = !Keybinds.SMR_strongSelected;
+                if (Keybinds.SMR_strongSelected)
+                {
+                    Minecraft.getInstance().player.playSound(SoundRegistry.SMR_SWITCHTO_WEAK.get());
+                } else
+                {
+                    Minecraft.getInstance().player.playSound(SoundRegistry.SMR_SWITCHTO_STRONG.get());
+                }
+            }
             if (Keybinds.SMR_ACTIVATE.consumeClick())
-                PacketNetwork.sendToServer((Keybinds.SMR_strongSelected ? new SMRStrongExplosionPacket() : new SMRWeakExplosionPacket()));
+            if (Keybinds.SMR_strongSelected)
+            {
+                PacketNetwork.sendToServer(new SMRStrongExplosionPacket());
+            } else
+            {
+                PacketNetwork.sendToServer(new SMRWeakExplosionPacket());
+            }
         }
     }
 
