@@ -1,7 +1,11 @@
 package net.keb4.kims_artifacts.network;
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.network.c2s.SMRStrongExplosionPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
+import net.keb4.kims_artifacts.network.s2c.ManualDeltaSyncPacket;
+import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
+import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -26,6 +30,18 @@ public class PacketNetwork {
                 .networkProtocolVersion(() -> "1") // Define your protocol version
                 .simpleChannel();
 
+        INSTANCE.messageBuilder(SMRStrongExplosionPacket.class, id())
+                .encoder(SMRStrongExplosionPacket::encode) // Method to write packet data
+                .decoder(SMRStrongExplosionPacket::decode) // Method to read packet data
+                .consumerMainThread(SMRStrongExplosionPacket::handle) // Method to process packet on the main thread
+                .add();
+
+        INSTANCE.messageBuilder(SMRStrongExplosionCallbackPacket.class, id())
+                .encoder(SMRStrongExplosionCallbackPacket::encode) // Method to write packet data
+                .decoder(SMRStrongExplosionCallbackPacket::decode) // Method to read packet data
+                .consumerMainThread(SMRStrongExplosionCallbackPacket::handle) // Method to process packet on the main thread
+                .add();
+
         INSTANCE.messageBuilder(SMRWeakExplosionPacket.class, id())
                 .encoder(SMRWeakExplosionPacket::encode) // Method to write packet data
                 .decoder(SMRWeakExplosionPacket::decode) // Method to read packet data
@@ -37,7 +53,19 @@ public class PacketNetwork {
                 .decoder(SMRWeakExplosionCallbackPacket::decode) // Method to read packet data
                 .consumerMainThread(SMRWeakExplosionCallbackPacket::handle) // Method to process packet on the main thread
                 .add();
+
+        INSTANCE.messageBuilder(ManualDeltaSyncPacket.class, id())
+                .encoder(ManualDeltaSyncPacket::encode) // Method to write packet data
+                .decoder(ManualDeltaSyncPacket::decode) // Method to read packet data
+                .consumerMainThread(ManualDeltaSyncPacket::handle) // Method to process packet on the main thread
+                .add();
+        INSTANCE.messageBuilder(ScreenShakePacket.class, id())
+                .encoder(ScreenShakePacket::encode) // Method to write packet data
+                .decoder(ScreenShakePacket::decode) // Method to read packet data
+                .consumerMainThread(ScreenShakePacket::handle) // Method to process packet on the main thread
+                .add();
     }
+
 
 
     /**

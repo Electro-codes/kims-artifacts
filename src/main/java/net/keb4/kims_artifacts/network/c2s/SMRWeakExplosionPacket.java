@@ -1,13 +1,12 @@
 package net.keb4.kims_artifacts.network.c2s;
 
+import net.keb4.kims_artifacts.network.s2c.ClientPacketHandlers;
+import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/**
- * @apiNote Example of a client to server packet. No data needs to be written because the server knows what the correct values are (e.x, explosion strength)
- * **/
 public class SMRWeakExplosionPacket {
 
     public SMRWeakExplosionPacket() {
@@ -27,10 +26,17 @@ public class SMRWeakExplosionPacket {
     public static void handle(SMRWeakExplosionPacket message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            ServerPacketHandlers.handleSMRSmallExplosionPacket(message,contextSupplier);
+            ServerPacketHandlers.handleSMRWeakExplosionPacket(message,contextSupplier);
         });
         context.setPacketHandled(true); // Mark the packet as handled
     }
+
+
+
+
+
+
+
 
 
 }

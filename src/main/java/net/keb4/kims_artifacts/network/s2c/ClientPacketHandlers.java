@@ -1,7 +1,9 @@
 package net.keb4.kims_artifacts.network.s2c;
 
+import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
 import net.keb4.kims_artifacts.client.util.ParticleHelper;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
+import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.client.Minecraft;
@@ -16,7 +18,12 @@ import java.util.function.Supplier;
 
 public class ClientPacketHandlers {
 
-    public static void handleSMRWeakExplosionPacketCB(SMRWeakExplosionCallbackPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static void handleManualDeltaSyncPacket(ManualDeltaSyncPacket msg, Supplier<NetworkEvent.Context> ctx)
+    {
+        Minecraft.getInstance().player.setDeltaMovement(msg.delta);
+    }
+
+    public static void handleSMRStrongExplosionPacketCB(SMRStrongExplosionCallbackPacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         Entity sender = Minecraft.getInstance().level.getEntity(msg.senderID);
         if (sender == null) return;
@@ -32,10 +39,21 @@ public class ClientPacketHandlers {
         }
     }
 
+    public static void handleSMRWeakExplosionPacketCB(SMRWeakExplosionCallbackPacket msg, Supplier<NetworkEvent.Context> ctx)
+    {
+        Entity sender = Minecraft.getInstance().level.getEntity(msg.senderID);
+        if (sender == null) return;
+        if (sender instanceof Player player) {
+            HitResult r = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
+            ParticleHelper.explosion(r.getLocation(), 1.0D,50.0D,2.5D, ParticleTypes.POOF);
+            ParticleHelper.sphere(r.getLocation(), 1.0D,5.0D, ParticleTypes.POOF);
+            player.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 3f, 1f);
+        }
+    }
 
-
-
-
-
+    public static void handleScreenShakePacket(ScreenShakePacket msg, Supplier<NetworkEvent.Context> ctx)
+    {
+        ScreenShakeRenderer.shakeScreen(msg.duration, msg.strength, msg.type);
+    }
 
 }

@@ -1,17 +1,22 @@
 package net.keb4.kims_artifacts.network.c2s;
 
-import net.keb4.kims_artifacts.entity.damage.DamageTypes;
+
+import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
+import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
+import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.util.CurioHelper;
+import net.keb4.kims_artifacts.util.ExplosionHelper;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
+
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
@@ -28,25 +33,75 @@ public class ServerPacketHandlers {
     public static final int defaultResponseRange = 16*4; //~4 chunks
 
 
-    public static void handleSMRSmallExplosionPacket(SMRWeakExplosionPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static void handleSMRStrongExplosionPacket(SMRStrongExplosionPacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         ServerPlayer player = player(ctx);
-            HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
-            if (hit.getType() == HitResult.Type.MISS) {
-                return;
+        if (!(CurioHelper.getArtifactCurio(player).getItem() instanceof SMRItem)) return;
+        HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
+        float size = 8;
+
+        if (hit.getType() == HitResult.Type.MISS) {
+                Vec3 o = player.getEyePosition().add(player.getLookAngle().scale(SMRItem.RAYCAST_RANGE));
+                ExplosionHelper.createBasicKnockbackedExplosion(player, player.serverLevel(), o, size, Level.ExplosionInteraction.TNT, false);
             }
 
-            Vec3 pos = hit.getLocation();
+            Vec3 pos;
+            if (hit instanceof EntityHitResult hitE)
+            {
+                pos = hitE.getEntity().getPosition(1.0f).add(hitE.getEntity().getForward().scale(0.5));
+            } else
+            {
+                pos = hit.getLocation();
+            }
 
             ServerLevel server = player.serverLevel();
 
-            server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new EntityBasedExplosionDamageCalculator(player), pos.x, pos.y, pos.z, 2f, false, Level.ExplosionInteraction.TNT);
+            ExplosionHelper.createBasicKnockbackedExplosion(player, server, pos, size, Level.ExplosionInteraction.TNT, true);
 
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
-                    PacketNetwork.sendToPlayer(new SMRWeakExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
+                    PacketNetwork.sendToPlayer(new SMRStrongExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
+                    //screen shake intensity diminishes based on player distance
+                    float coeff = (float) (1/((0.01 * pos.distanceTo(p.position()))+1));
+                    Main.LOGGER.info(String.valueOf(coeff));
+                    coeff = coeff < 0.2f ? 0 : coeff;
+                    if (coeff > 0) {
+                        PacketNetwork.sendToServer(new ScreenShakePacket(coeff, 1, ScreenShakeRenderer.Types.DEFAULT));
+                    }
                 }
             }
+    }
+
+    public static void handleSMRWeakExplosionPacket(SMRWeakExplosionPacket msg, Supplier<NetworkEvent.Context> ctx)
+    {
+        ServerPlayer player = player(ctx);
+        if (!(CurioHelper.getArtifactCurio(player).getItem() instanceof SMRItem)) return;
+        HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
+        ServerLevel server = player.serverLevel();
+        float size = 4f;
+        if (hit.getType() == HitResult.Type.MISS) {
+
+            Vec3 o = player.getEyePosition().add(player.getLookAngle().scale(SMRItem.RAYCAST_RANGE));
+            ExplosionHelper.generateKnockback(player, o, new Vec3(size,size,size), 1.2f);
+        }
+        Vec3 pos;
+        if (hit instanceof EntityHitResult hitE)
+        {
+            pos = hitE.getEntity().getPosition(1.0f).add(hitE.getEntity().getForward().scale(0.5));
+        } else
+        {
+            pos = hit.getLocation();
+        }
+
+        ExplosionHelper.generateKnockback(player, pos, new Vec3(size,size,size), 1.2f);
+
+
+        for (Player p : player.level().players()) {
+            if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
+                PacketNetwork.sendToPlayer(new SMRWeakExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
+            }
+        }
+
     }
 
 

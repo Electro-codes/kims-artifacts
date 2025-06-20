@@ -1,17 +1,12 @@
 package net.keb4.kims_artifacts.network.s2c.effects;
 
-
 import net.keb4.kims_artifacts.network.s2c.ClientPacketHandlers;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/**
- * @apiNote Example of a callback or response packet from the server to a client or clients.
- * **/
 public class SMRWeakExplosionCallbackPacket {
-
     public final int senderID;
 
     public SMRWeakExplosionCallbackPacket(FriendlyByteBuf buf) {
@@ -38,6 +33,4 @@ public class SMRWeakExplosionCallbackPacket {
         });
         context.setPacketHandled(true); // Mark the packet as handled
     }
-
-
 }

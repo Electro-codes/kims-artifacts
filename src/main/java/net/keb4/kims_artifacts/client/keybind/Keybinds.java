@@ -16,8 +16,12 @@ public class Keybinds {
     public static final String KEY_CATEGORY = "key.category." + Main.MODID;
     private static final HashSet<KeyMapping> keybindList = new HashSet<>();
 
-    public static final KeyMapping SMR_SMALL_EXPLOSION = Util.buildKey("smr_small_explosion", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C);
+    //Clientsided Gameplay Settings
+    public static boolean SMR_strongSelected = false;
 
+
+    public static final KeyMapping SMR_ACTIVATE = Util.buildKey("smr_activate", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C);
+    public static final KeyMapping SMR_SWITCH = Util.buildKey("smr_switch", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K);
 
     @SubscribeEvent
     public static void registerMappings(RegisterKeyMappingsEvent event)

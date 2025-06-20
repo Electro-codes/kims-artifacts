@@ -1,11 +1,22 @@
 package net.keb4.kims_artifacts.event;
 
 
+import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ArtifactItem;
+import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
+import net.keb4.kims_artifacts.util.DamageFuncs;
 import net.keb4.kims_artifacts.world.ArtifactGenData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,6 +39,19 @@ public class ServerEventHandler {
         }
     }
 
-
-
+    @SubscribeEvent
+    public static void onDamage(LivingHurtEvent event)
+    {
+        if (event.getEntity().level().isClientSide) return;
+        if (event.getEntity() instanceof Player player)
+        {
+            int lvl = EnchantmentHelper.getEnchantmentLevel(EnchantmentRegistry.AEGIS.get(), player);
+            if (lvl > 0 && event.getSource() == DamageTypes.ARTIFACT.getSource(player.level(),null))
+            {
+                float reduction = DamageFuncs.Point.funcDefault(lvl);
+                Main.LOGGER.info("artifact damage reduction: {}", 1-reduction);
+                event.setAmount(event.getAmount() * reduction);
+            }
+        }
+    }
 }

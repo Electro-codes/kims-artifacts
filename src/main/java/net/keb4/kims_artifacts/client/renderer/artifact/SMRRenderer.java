@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.client.renderer.artifact;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.client.keybind.Keybinds;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
