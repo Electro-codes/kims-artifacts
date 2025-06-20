@@ -65,7 +65,7 @@ public class ServerPacketHandlers {
                 player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
                 PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
                 server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), null, pos.x, pos.y, pos.z, size, false, Level.ExplosionInteraction.BLOCK, false);
-                server.playSound(null, new BlockPos((int) pos.x, (int) pos.y, (int) pos.z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
+                server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
                     PacketNetwork.sendToPlayer(new SMRStrongExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
@@ -102,7 +102,7 @@ public class ServerPacketHandlers {
         }
 
         ExplosionHelper.generateKnockback(player, pos, new Vec3(size,size,size), 1.2f);
-        server.playSound(null, new BlockPos((int) pos.x, (int) pos.y, (int) pos.z), SoundRegistry.SMR_WEAK_SHOOT.get(), SoundSource.BLOCKS);
+        server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_WEAK_SHOOT.get(), SoundSource.BLOCKS);
 
 
         for (Player p : player.level().players()) {
