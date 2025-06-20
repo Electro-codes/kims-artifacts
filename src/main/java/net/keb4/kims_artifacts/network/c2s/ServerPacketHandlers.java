@@ -3,8 +3,10 @@ package net.keb4.kims_artifacts.network.c2s;
 
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
+import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
+import net.keb4.kims_artifacts.network.s2c.ManualDeltaSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
@@ -38,11 +40,12 @@ public class ServerPacketHandlers {
         ServerPlayer player = player(ctx);
         if (!(CurioHelper.getArtifactCurio(player).getItem() instanceof SMRItem)) return;
         HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
-        float size = 8;
+        float size = 2;
 
         if (hit.getType() == HitResult.Type.MISS) {
-                Vec3 o = player.getEyePosition().add(player.getLookAngle().scale(SMRItem.RAYCAST_RANGE));
-                ExplosionHelper.createBasicKnockbackedExplosion(player, player.serverLevel(), o, size, Level.ExplosionInteraction.TNT, false);
+                player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
+                PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
+                
             }
 
             Vec3 pos;
@@ -56,7 +59,9 @@ public class ServerPacketHandlers {
 
             ServerLevel server = player.serverLevel();
 
-            ExplosionHelper.createBasicKnockbackedExplosion(player, server, pos, size, Level.ExplosionInteraction.TNT, true);
+                player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
+                PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
+                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), null, pos.x, pos.y, pos.z, size, false, Level.ExplosionInteraction.BLOCK, false);
 
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
@@ -66,7 +71,7 @@ public class ServerPacketHandlers {
                     Main.LOGGER.info(String.valueOf(coeff));
                     coeff = coeff < 0.2f ? 0 : coeff;
                     if (coeff > 0) {
-                        PacketNetwork.sendToServer(new ScreenShakePacket(coeff, 1, ScreenShakeRenderer.Types.DEFAULT));
+                        PacketNetwork.sendToServer(new ScreenShakePacket(coeff, 2, ScreenShakeRenderer.Types.DEFAULT));
                     }
                 }
             }
