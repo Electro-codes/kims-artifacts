@@ -65,4 +65,19 @@ public class ParticleHelper {
             world.addParticle(particleType, x, y, z, x_relative*force, y_relative*force, z_relative*force);
         }
     }
+    public static void line(Vec3 start, Vec3 end, double densityConstant,double force, ParticleOptions particleType) {
+        ClientLevel world = Minecraft.getInstance().level;
+        if (world.isClientSide() == false) {
+            Main.LOGGER.error("Tried to spawn particles on the server side! This is not allowed!");
+            return;
+        }
+        Vec3 direction = end.subtract(start).normalize();
+        double distance = start.distanceTo(end);
+        int totalParticles = (int) (densityConstant * distance);
+        for (int i = 0; i < totalParticles; i++) {
+            double t = (double) i / (totalParticles - 1);
+            Vec3 position = start.add(direction.scale(t * distance));
+            world.addParticle(particleType, position.x, position.y, position.z, direction.x*force, direction.y*force, direction.z*force);
+        }
+    }
 }

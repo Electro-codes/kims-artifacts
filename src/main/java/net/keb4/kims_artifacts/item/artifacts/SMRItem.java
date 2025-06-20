@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * **/
 public class SMRItem extends CurioArtifactItem {
 
-    public static final double RAYCAST_RANGE = 20.0D;
+    public static final double RAYCAST_RANGE = 100.0D;
 
 
     @Override

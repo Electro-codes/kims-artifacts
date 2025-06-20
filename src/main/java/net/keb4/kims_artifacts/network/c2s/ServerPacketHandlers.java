@@ -40,7 +40,7 @@ public class ServerPacketHandlers {
 
             ServerLevel server = player.serverLevel();
 
-            server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new EntityBasedExplosionDamageCalculator(player), pos.x, pos.y, pos.z, 5f, false, Level.ExplosionInteraction.TNT);
+            server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new EntityBasedExplosionDamageCalculator(player), pos.x, pos.y, pos.z, 2f, false, Level.ExplosionInteraction.TNT);
 
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {

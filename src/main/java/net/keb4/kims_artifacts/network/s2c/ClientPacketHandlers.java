@@ -21,9 +21,13 @@ public class ClientPacketHandlers {
         Entity sender = Minecraft.getInstance().level.getEntity(msg.senderID);
         if (sender == null) return;
         if (sender instanceof Player player) {
+            double headYaw = Math.toRadians(player.getYHeadRot());
+            double headPitch = Math.toRadians(player.getXRot());
             HitResult r = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
-            ParticleHelper.explosion(r.getLocation(), 2.0D,50.0D,5.0D, ParticleTypes.POOF);
-            ParticleHelper.sphere(r.getLocation(), 2.0D,5.0D, ParticleTypes.POOF);
+            ParticleHelper.explosion(player.getEyePosition().add((-Math.cos(headYaw))*0.60,-0.35+Math.cos(-headPitch),(-Math.sin(headYaw))*0.60),1.0D,50.0D,10D, ParticleTypes.ELECTRIC_SPARK);
+            ParticleHelper.line(player.getEyePosition().add((-Math.cos(headYaw))*0.60,-0.35+Math.cos(-headPitch),(-Math.sin(headYaw))*0.60), r.getLocation(), 0.3D,1, ParticleTypes.POOF);
+            ParticleHelper.explosion(r.getLocation(), 2.0D,50.0D,1.0D, ParticleTypes.SPIT);
+            ParticleHelper.sphere(r.getLocation(), 3.0D,10.0D, ParticleTypes.POOF);
             player.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 3f, 0.2f);
         }
     }
