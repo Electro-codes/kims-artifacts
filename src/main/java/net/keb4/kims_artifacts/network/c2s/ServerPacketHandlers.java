@@ -2,7 +2,6 @@ package net.keb4.kims_artifacts.network.c2s;
 
 
 import net.keb4.kims_artifacts.Main;
-import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
