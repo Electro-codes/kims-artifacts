@@ -13,6 +13,7 @@ import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.keb4.kims_artifacts.util.CurioHelper;
 import net.keb4.kims_artifacts.util.ExplosionHelper;
 import net.keb4.kims_artifacts.util.RayUtils;
+import net.keb4.kims_artifacts.world.SMRExplosionDamageCalculator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,9 +60,10 @@ public class ServerPacketHandlers {
                 player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
                 PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
                 ExplosionHelper.createAoeDamage(player, pos, 20, 3, DamageTypes.ARTIFACT.getSource(server, player));
-                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player),null, pos.x, pos.y, pos.z, 2, false, Level.ExplosionInteraction.BLOCK, false);
+                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new SMRExplosionDamageCalculator(), pos.x, pos.y, pos.z, 2, false, Level.ExplosionInteraction.BLOCK, false);
                 server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
-            for (Player p : player.level().players()) {
+
+                for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
                     PacketNetwork.sendToPlayer(new SMRStrongExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
                     //screen shake intensity diminishes based on player distance

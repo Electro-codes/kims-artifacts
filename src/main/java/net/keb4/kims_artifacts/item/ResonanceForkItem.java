@@ -1,9 +1,11 @@
 package net.keb4.kims_artifacts.item;
 
+import net.keb4.kims_artifacts.client.particle.ParticleTypes;
 import net.keb4.kims_artifacts.entity.capability.CapRegistry;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -45,7 +47,10 @@ public class ResonanceForkItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
-        if (pLevel.isClientSide) return super.use(pLevel,pPlayer,pUsedHand);
+        if (pLevel.isClientSide)
+        {
+            return super.use(pLevel, pPlayer, pUsedHand);
+        }
         Vec3 pos = RayUtils.simpleBlockRay(pPlayer, 2, true).getLocation();
 
         List<? extends Entity> entities = RayUtils.getEntitiesFromBox((ServerLevel) pLevel, pos, new Vec3(0.5,0.5,0.5), entity -> entity instanceof ItemEntity);
