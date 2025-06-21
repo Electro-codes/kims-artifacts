@@ -35,9 +35,8 @@ public class PlayerArtifactCapability implements IArtifactPlayerCap{
     {
         capability.getResonanceValues().clear();
         for (RegistryObject<Item> item : ItemRegistry.getArtifacts()) {
-            Main.LOGGER.info("ran randomize iteration");
             ArtifactItem artifact = (ArtifactItem) item.get();
-            capability.getResonanceValues().put(item.getId(), artifact.getDefaultResonance() + (r.nextBoolean() ? (r.nextFloat() * randCoeff) : -(r.nextFloat() * randCoeff)));
+            capability.getResonanceValues().put(item.getId(), Mth.clamp(artifact.getDefaultResonance() + (r.nextBoolean() ? (r.nextFloat() * randCoeff * 0.1f) : -(r.nextFloat() * randCoeff * 0.1f)), 0.1f, 1f));
         }
         PacketNetwork.sendToPlayer(new ResonanceSyncPacket(capability.getResonanceValues(), capability.isInitializedAlready()), player);
     }
@@ -80,8 +79,6 @@ public class PlayerArtifactCapability implements IArtifactPlayerCap{
     public void copyFrom(IArtifactPlayerCap source) {
         this.resonanceValues = new HashMap<>(source.getResonanceValues());
         this.initalizedAlready = source.isInitializedAlready();
-        Main.LOGGER.info(String.valueOf((source.isInitializedAlready())));
-        Main.LOGGER.info(String.valueOf((this.isInitializedAlready())));
     }
 
     @Override
@@ -90,7 +87,8 @@ public class PlayerArtifactCapability implements IArtifactPlayerCap{
         ListTag resonanceList = new ListTag();
         this.resonanceValues.forEach((resourceLocation, num) -> {
             CompoundTag t = new CompoundTag();
-            t.putFloat(resourceLocation.getNamespace() + resourceLocation.getPath(), num);
+            t.putString("id", resourceLocation.toString());
+            t.putFloat("resonance", num);
             resonanceList.add(t);
         });
         root.putBoolean(FIRST_INITALIZE_FLAG, this.initalizedAlready);
@@ -106,8 +104,8 @@ public class PlayerArtifactCapability implements IArtifactPlayerCap{
         for (int i = 0; i < resonanceList.size(); i++)
         {
             CompoundTag t = resonanceList.getCompound(i);
-            String name = (String) t.getAllKeys().toArray()[0];
-            this.resonanceValues.put(ResourceLocation.parse(name), t.getFloat(name));
+            String name = t.getString("id");
+            this.resonanceValues.put(ResourceLocation.parse(name), t.getFloat("resonance"));
         }
     }
 }

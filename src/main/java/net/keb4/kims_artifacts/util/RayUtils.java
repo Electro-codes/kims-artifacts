@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.util;
 
 import net.keb4.kims_artifacts.Main;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -19,6 +20,11 @@ import java.util.function.Predicate;
  * @apiNote Contains various raycast utilities.
  * **/
 public class RayUtils {
+
+    public static List<? extends Entity> getEntitiesFromBox(ServerLevel level, Vec3 center, Vec3 dimensions, Predicate<? super Entity> whitelist)
+    {
+        return level.getEntities((Entity)null, AABB.ofSize(center, dimensions.x,dimensions.y,dimensions.z), whitelist);
+    }
 
     public static BlockHitResult simpleBlockRay(Player player, double length, boolean ignoreFluids)
     {

@@ -23,7 +23,7 @@ public class ResonanceSyncPacket {
         this.resonanceValues = new HashMap<>();
         for (int i = 0; i < length; i++)
         {
-            this.resonanceValues.put(buf.readResourceLocation(), buf.readFloat());
+            this.resonanceValues.put(ResourceLocation.parse(buf.readUtf()), buf.readFloat());
         }
 
     }
@@ -39,7 +39,7 @@ public class ResonanceSyncPacket {
         buf.writeInt(msg.length);
         for (RegistryObject<Item> a : ItemRegistry.getArtifacts())
         {
-            buf.writeResourceLocation(a.getId());
+            buf.writeUtf(a.getId().toString());
             buf.writeFloat(msg.resonanceValues.get(a.getId()));
         }
     }

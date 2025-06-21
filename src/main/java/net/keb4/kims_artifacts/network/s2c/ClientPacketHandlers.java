@@ -66,7 +66,6 @@ public class ClientPacketHandlers {
     {
         IArtifactPlayerCap cap = Minecraft.getInstance().player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get();
         PlayerArtifactCapability newCap = new PlayerArtifactCapability(message.resonanceValues, message.initialized);
-        Main.LOGGER.info("syncing resonance...: ");
-       cap.copyFrom(newCap);
+        cap.copyFrom(newCap);
     }
 }

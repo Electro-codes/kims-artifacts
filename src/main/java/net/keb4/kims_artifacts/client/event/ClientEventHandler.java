@@ -1,5 +1,6 @@
 package net.keb4.kims_artifacts.client.event;
 
+import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.client.keybind.Keybinds;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -8,9 +9,12 @@ import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.keb4.kims_artifacts.util.CurioHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
