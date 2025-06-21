@@ -44,12 +44,13 @@
         "name": "kims_artifacts:smr_weakshot",
         "volume": 1.0,
         "pitch": 1.0,
-        "weight": 1
+        "weight": 1,
+        "attenuation_distance": 128
       }
     ],
     "subtitle": "subtitles.kims_artifacts.smr_weakshot",
     "category": "player",
-    "attenuation_distance": 128
+    "attenuation_distance": 80
   },
   "smr_strongshot": {
     "sounds": [
@@ -57,7 +58,8 @@
         "name": "kims_artifacts:smr_strongshot",
         "volume": 1.0,
         "pitch": 1.0,
-        "weight": 1
+        "weight": 1,
+        "attenuation_distance": 128
       }
     ],
     "subtitle": "subtitles.kims_artifacts.smr_strongshot",

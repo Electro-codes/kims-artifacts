@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
-
+import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -44,11 +44,6 @@ public class ServerPacketHandlers {
         HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
         float size = 2;
 
-        if (hit.getType() == HitResult.Type.MISS) {
-                player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
-                PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
-                
-            }
 
             Vec3 pos;
             if (hit instanceof EntityHitResult hitE)
@@ -63,7 +58,7 @@ public class ServerPacketHandlers {
 
                 player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
                 PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
-                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), null, pos.x, pos.y, pos.z, size, false, Level.ExplosionInteraction.BLOCK, false);
+                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player),null, pos.x, pos.y, pos.z, size, false, Level.ExplosionInteraction.BLOCK, false);
                 server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
@@ -86,11 +81,6 @@ public class ServerPacketHandlers {
         HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
         ServerLevel server = player.serverLevel();
         float size = 4f;
-        if (hit.getType() == HitResult.Type.MISS) {
-
-            Vec3 o = player.getEyePosition().add(player.getLookAngle().scale(SMRItem.RAYCAST_RANGE));
-            ExplosionHelper.generateKnockback(player, o, new Vec3(size,size,size), 1.2f);
-        }
         Vec3 pos;
         if (hit instanceof EntityHitResult hitE)
         {
@@ -100,7 +90,10 @@ public class ServerPacketHandlers {
             pos = hit.getLocation();
         }
 
-        ExplosionHelper.generateKnockback(player, pos, new Vec3(size,size,size), 1.2f);
+        player.addDeltaMovement(player.getLookAngle().scale(1).reverse());
+        PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
+
+        
         server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_WEAK_SHOOT.get(), SoundSource.BLOCKS);
 
 
