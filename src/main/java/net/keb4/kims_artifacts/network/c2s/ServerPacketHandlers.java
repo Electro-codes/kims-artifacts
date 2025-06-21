@@ -42,7 +42,7 @@ public class ServerPacketHandlers {
         ServerPlayer player = player(ctx);
         if (!(CurioHelper.getArtifactCurio(player).getItem() instanceof SMRItem)) return;
         HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
-        float size = 2;
+        
 
 
             Vec3 pos;
@@ -58,7 +58,8 @@ public class ServerPacketHandlers {
 
                 player.addDeltaMovement(player.getLookAngle().scale(4).reverse());
                 PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
-                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player),null, pos.x, pos.y, pos.z, size, false, Level.ExplosionInteraction.BLOCK, false);
+                ExplosionHelper.createAoeDamage(player, pos, 20, 3, DamageTypes.ARTIFACT.getSource(server, player));
+                server.explode(player, DamageTypes.ARTIFACT.getSource(server, player),null, pos.x, pos.y, pos.z, 2, false, Level.ExplosionInteraction.BLOCK, false);
                 server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
             for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
@@ -80,7 +81,7 @@ public class ServerPacketHandlers {
         if (!(CurioHelper.getArtifactCurio(player).getItem() instanceof SMRItem)) return;
         HitResult hit = RayUtils.simpleEntityBlockRay(player, SMRItem.RAYCAST_RANGE, true);
         ServerLevel server = player.serverLevel();
-        float size = 4f;
+        
         Vec3 pos;
         if (hit instanceof EntityHitResult hitE)
         {
@@ -93,7 +94,7 @@ public class ServerPacketHandlers {
         player.addDeltaMovement(player.getLookAngle().scale(1).reverse());
         PacketNetwork.sendToPlayer(new ManualDeltaSyncPacket(player.getDeltaMovement()), player);
 
-        
+        ExplosionHelper.createAoeDamage(player, pos, 8, 2, DamageTypes.ARTIFACT.getSource(server, player));
         server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_WEAK_SHOOT.get(), SoundSource.BLOCKS);
 
 
