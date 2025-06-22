@@ -5,7 +5,10 @@ import net.keb4.kims_artifacts.client.particle.FlamepoofParticle;
 import net.keb4.kims_artifacts.client.particle.ParticleTypes;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.client.renderer.overlay.SMROverlayRenderer;
+import net.keb4.kims_artifacts.client.screen.PotionBagScreen;
+import net.keb4.kims_artifacts.container.MenuRegistry;
 import net.keb4.kims_artifacts.item.ItemRegistry;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -27,7 +30,11 @@ public class ClientSetup {
     @SubscribeEvent
     public static void fmlClientSetup(FMLClientSetupEvent event)
     {
-        CuriosRendererRegistry.register( (Item)(ItemRegistry.SMR_ITEM.get()), SMRRenderer::new);
+        event.enqueueWork(() -> {
+            CuriosRendererRegistry.register( (Item)(ItemRegistry.SMR_ITEM.get()), SMRRenderer::new);
+            MenuScreens.register(MenuRegistry.POTION_BAG_MENU.get(), PotionBagScreen::new);
+        });
+
     }
 
     @SubscribeEvent

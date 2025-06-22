@@ -5,6 +5,7 @@ import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.keb4.kims_artifacts.client.particle.ParticleTypes;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.config.CommonConfig;
+import net.keb4.kims_artifacts.container.MenuRegistry;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -42,6 +43,7 @@ public class Main
         IEventBus modEventBus = context.getModEventBus();
         CommonConfig.register(context);
 
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerLayerDefinitions);
@@ -55,6 +57,7 @@ public class Main
         ParticleTypes.register(modEventBus);
         EnchantmentRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
+        MenuRegistry.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

@@ -6,19 +6,24 @@ import net.keb4.kims_artifacts.client.util.ParticleHelper;
 import net.keb4.kims_artifacts.entity.capability.CapRegistry;
 import net.keb4.kims_artifacts.entity.capability.IArtifactPlayerCap;
 import net.keb4.kims_artifacts.entity.capability.PlayerArtifactCapability;
+import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class ClientPacketHandlers {
 
@@ -60,5 +65,30 @@ public class ClientPacketHandlers {
     public static void handleScreenShakePacket(ScreenShakePacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         ScreenShakeRenderer.shakeScreen(msg.duration, msg.strength, msg.type);
+    }
+
+    public static void handleResonanceSyncPacket(ResonanceSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        IArtifactPlayerCap cap = Minecraft.getInstance().player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get();
+        PlayerArtifactCapability newCap = new PlayerArtifactCapability(message.resonanceValues, message.initialized);
+        cap.copyFrom(newCap);
+    }
+
+    public static void handlePotionBagProgressSyncPacket(PotionBagProgressSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        Main.LOGGER.info("Synced!");
+        ServerPlayer sender = contextSupplier.get().getSender();
+
+        List<ItemStack> potentials = sender.getInventory().items.stream()
+                .filter(stack -> stack.getItem() instanceof PotionBagItem)
+                .collect(Collectors.toList());
+
+        if (potentials.size() > 1)
+        {
+            return;
+        }
+        ItemStack bag = potentials.get(0);
+        bag.getOrCreateTag().putInt("Progress", message.progress);
+
     }
 }
