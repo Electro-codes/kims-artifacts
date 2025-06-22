@@ -9,14 +9,6 @@ import java.util.HashMap;
 public interface IArtifactPlayerCap {
 
 
-    /**
-     * @return A map containing artifact IDs and float values. Dictates the players' compatibility with artifacts.
-     **/
-    HashMap<ResourceLocation, Float> getResonanceValues();
-    ImmutableMap<ResourceLocation, Float> getImmutableResonanceValues();
-    boolean isInitializedAlready();
-    void setInitalized();
-
 
     // Methods for persistence (saving/loading/cloning)
     void copyFrom(IArtifactPlayerCap source);

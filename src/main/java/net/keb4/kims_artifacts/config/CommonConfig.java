@@ -15,14 +15,7 @@ public class CommonConfig {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     //add usable value
-    public static boolean resonanceEnabled = true;
     public static double smrRange = 100.0D;
-
-
-    //add forge recognition in the config file
-    private static final ForgeConfigSpec.BooleanValue RESONANCE_ENABLED = BUILDER
-            .comment("Disabling this disables power imbalances with artifacts among players. All players can equally use all artifacts")
-            .define("resonanceEnabled", true);
 
     private static final ForgeConfigSpec.DoubleValue SMR_RANGE = BUILDER
             .comment("SMR Artifact Raycast Range")
@@ -37,7 +30,6 @@ public class CommonConfig {
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-        resonanceEnabled = RESONANCE_ENABLED.get();
         smrRange = SMR_RANGE.get();
     }
 

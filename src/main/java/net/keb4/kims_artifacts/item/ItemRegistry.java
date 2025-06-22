@@ -24,7 +24,6 @@ public class ItemRegistry {
     //example method of registering an artifact
     public static final RegistryObject<Item> TEST_ITEM = registerArtifact("test", ArtifactItem::new);
     public static final RegistryObject<Item> SMR_ITEM = registerArtifact("smr", SMRItem::new);
-    public static final RegistryObject<Item> RESONANCE_FORK = ITEMS.register("resonance_fork", ResonanceForkItem::new);
 
     public static void register(IEventBus bus)
     {

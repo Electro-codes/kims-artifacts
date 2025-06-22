@@ -61,11 +61,4 @@ public class ClientPacketHandlers {
     {
         ScreenShakeRenderer.shakeScreen(msg.duration, msg.strength, msg.type);
     }
-
-    public static void handleResonanceSyncPacket(ResonanceSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
-    {
-        IArtifactPlayerCap cap = Minecraft.getInstance().player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get();
-        PlayerArtifactCapability newCap = new PlayerArtifactCapability(message.resonanceValues, message.initialized);
-        cap.copyFrom(newCap);
-    }
 }

@@ -23,26 +23,6 @@ public class CommandRegistry {
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
-        // Register the base command: /mycommand
-        dispatcher.register(
-                Commands.literal(Main.MODID)
-                        .requires(commandSourceStack -> commandSourceStack.hasPermission(2))
-                        .then(Commands.literal("resonance")
-                                .then(Commands.literal("set")
-                                        .then(Commands.argument("id", StringArgumentType.string())
-                                                .then(Commands.argument("float", FloatArgumentType.floatArg(0,1))
-                                                        .executes(CommandRegistry::runResonanceChange)))
-                                )        ));
-    }
-
-
-    public static int runResonanceChange(CommandContext<CommandSourceStack> context)
-    {
-        ServerPlayer player = context.getSource().getPlayer();
-        float val = FloatArgumentType.getFloat(context, "float");
-        ResourceLocation id = ResourceLocation.parse(StringArgumentType.getString(context, "id"));
-        player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get().getResonanceValues().replace(id, val);
-        return 1;
     }
 
 }
