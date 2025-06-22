@@ -62,13 +62,11 @@ public class ServerPacketHandlers {
                 ExplosionHelper.createAoeDamage(player, pos, 20, 3, DamageTypes.ARTIFACT.getSource(server, player));
                 server.explode(player, DamageTypes.ARTIFACT.getSource(server, player), new SMRExplosionDamageCalculator(), pos.x, pos.y, pos.z, 2, false, Level.ExplosionInteraction.BLOCK, false);
                 server.playSound(null, new BlockPos((int) player.position().x, (int) player.position().y, (int) player.position().z), SoundRegistry.SMR_STRONG_SHOOT.get(), SoundSource.BLOCKS);
-
                 for (Player p : player.level().players()) {
                 if (p.position().distanceToSqr(player.position()) <= defaultResponseRange * defaultResponseRange) {
                     PacketNetwork.sendToPlayer(new SMRStrongExplosionCallbackPacket(player.getId()), (ServerPlayer) p);
                     //screen shake intensity diminishes based on player distance
                     float coeff = (float) (1/((0.01 * pos.distanceTo(p.position()))+1));
-                    Main.LOGGER.info(String.valueOf(coeff));
                     coeff = coeff < 0.2f ? 0 : coeff;
                     if (coeff > 0) {
                         PacketNetwork.sendToServer(new ScreenShakePacket(coeff*4, 2, "DEFAULT"));

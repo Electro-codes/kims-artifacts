@@ -12,6 +12,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -107,5 +108,15 @@ public class PlayerArtifactCapability implements IArtifactPlayerCap{
             String name = t.getString("id");
             this.resonanceValues.put(ResourceLocation.parse(name), t.getFloat("resonance"));
         }
+    }
+
+    public static float getResonanceFrom(Player player, ResourceLocation id)
+    {
+        return player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get().getImmutableResonanceValues().get(id);
+    }
+
+    public static float getResonanceFrom(Player player, String id)
+    {
+        return player.getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).resolve().get().getImmutableResonanceValues().get(ResourceLocation.parse(id));
     }
 }

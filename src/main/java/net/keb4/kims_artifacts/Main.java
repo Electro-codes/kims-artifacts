@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.keb4.kims_artifacts.client.particle.ParticleTypes;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
+import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -39,6 +40,7 @@ public class Main
     public Main(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+        CommonConfig.register(context);
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);

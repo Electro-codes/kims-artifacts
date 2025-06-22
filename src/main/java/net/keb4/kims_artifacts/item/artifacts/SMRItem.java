@@ -1,5 +1,6 @@
 package net.keb4.kims_artifacts.item.artifacts;
 
+import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.item.CurioArtifactItem;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.minecraft.ChatFormatting;
@@ -17,7 +18,7 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
  * **/
 public class SMRItem extends CurioArtifactItem {
 
-    public static final double RAYCAST_RANGE = 100.0D;
+    public static final double RAYCAST_RANGE = CommonConfig.smrRange;
 
 
     @Override
