@@ -10,7 +10,11 @@ import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ArtifactItem;
 import net.keb4.kims_artifacts.item.IArtifact;
 import net.keb4.kims_artifacts.item.ResonanceForkItem;
+import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
+import net.keb4.kims_artifacts.network.PacketNetwork;
+import net.keb4.kims_artifacts.network.c2s.ServerPacketHandlers;
+import net.keb4.kims_artifacts.network.s2c.PotionBagProgressSyncPacket;
 import net.keb4.kims_artifacts.util.DamageFuncs;
 import net.keb4.kims_artifacts.world.ArtifactGenData;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -36,6 +41,11 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.core.jmx.Server;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ServerEventHandler {
@@ -114,6 +124,29 @@ public class ServerEventHandler {
                 float reduction = DamageFuncs.Point.funcDefault(lvl);
                 Main.LOGGER.info("artifact damage reduction: {}%", (1-reduction)*100);
                 event.setAmount(event.getAmount() * reduction);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void tick(TickEvent.ServerTickEvent event)
+    {
+        if (event.phase == TickEvent.Phase.END)
+        {
+            List<UUID> replace = new ArrayList<>();
+            ServerPacketHandlers.itemBrewStates.replaceAll(((uuid, aLong) ->
+            {
+                aLong -= 1;
+                if (aLong < 0)
+                {
+                    replace.add(uuid);
+                    return 0;
+                }
+                return aLong;
+            }));
+            for (UUID u : replace)
+            {
+                ServerPacketHandlers.itemBrewStates.remove(u);
             }
         }
     }

@@ -1,6 +1,7 @@
 package net.keb4.kims_artifacts.item;
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,6 +25,8 @@ public class ItemRegistry {
     //example method of registering an artifact
     public static final RegistryObject<Item> TEST_ITEM = registerArtifact("test", ArtifactItem::new);
     public static final RegistryObject<Item> SMR_ITEM = registerArtifact("smr", SMRItem::new);
+    public static final RegistryObject<Item> POTION_BAG_ITEM = registerArtifact("potion_bag", PotionBagItem::new);
+
     public static final RegistryObject<Item> RESONANCE_FORK = ITEMS.register("resonance_fork", ResonanceForkItem::new);
 
     public static void register(IEventBus bus)

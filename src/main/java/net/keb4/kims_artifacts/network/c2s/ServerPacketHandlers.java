@@ -3,9 +3,12 @@ package net.keb4.kims_artifacts.network.c2s;
 
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
+import net.keb4.kims_artifacts.item.ItemRegistry;
+import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.keb4.kims_artifacts.network.s2c.ManualDeltaSyncPacket;
+import net.keb4.kims_artifacts.network.s2c.PotionBagProgressSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
@@ -14,11 +17,14 @@ import net.keb4.kims_artifacts.util.CurioHelper;
 import net.keb4.kims_artifacts.util.ExplosionHelper;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.keb4.kims_artifacts.world.SMRExplosionDamageCalculator;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -26,7 +32,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * @apiNote All methods inside this class are assumed to be run inside {@link NetworkEvent.Context#enqueueWork(Runnable)}
@@ -108,4 +116,30 @@ public class ServerPacketHandlers {
 
 
     public static ServerPlayer player(Supplier<NetworkEvent.Context> ctx) {return ctx.get().getSender();}
+
+
+    public static HashMap<UUID, Integer> itemBrewStates = new HashMap<>();
+    public static int maxBrewTime = 200;
+
+    public static void handlePotionMixPacket(PotionMixPacket message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        ServerPlayer sender = contextSupplier.get().getSender();
+        Main.LOGGER.info("Successfully received packet from sender!");
+        boolean check = sender.getInventory().hasAnyOf(Set.of(ItemRegistry.POTION_BAG_ITEM.get()));
+        if (true)
+        {
+            List<ItemStack> bag = sender.getInventory().items.stream()
+                    .filter(stack -> stack.getItem() instanceof PotionBagItem)
+                    .collect(Collectors.toList());
+            if (bag.size() > 1 || bag.isEmpty())
+            {
+                sender.sendSystemMessage(Component.literal("Duplicate bags detected (or none at all)! Cancelling...").withStyle(ChatFormatting.RED));
+                return;
+            }
+            ItemStack bagItem = bag.get(0);
+            itemBrewStates.put(sender.getUUID(), maxBrewTime);
+            int progress = (itemBrewStates.get(sender.getUUID()) == null ? -1 : itemBrewStates.get(sender.getUUID()));
+            PacketNetwork.sendToPlayer(new PotionBagProgressSyncPacket(progress, sender.getUUID()), sender);
+        }
+    }
 }
