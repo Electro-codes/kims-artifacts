@@ -3,6 +3,7 @@ package net.keb4.kims_artifacts.item.artifacts;
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.container.PotionBagMenu;
 import net.keb4.kims_artifacts.item.ArtifactItem;
+import net.keb4.kims_artifacts.item.CurioArtifactItem;
 import net.keb4.kims_artifacts.util.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,11 +17,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
+import top.theillusivec4.curios.api.SlotContext;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class PotionBagItem extends ArtifactItem {
+public class PotionBagItem extends CurioArtifactItem {
 
 
 
@@ -82,5 +84,9 @@ public class PotionBagItem extends ArtifactItem {
     public void onCraftedBy(ItemStack pStack, Level pLevel, Player pPlayer) {
         // Ensure the NBT exists and potentially set up default inventory
         super.onCraftedBy(pStack, pLevel, pPlayer);
+    }
+    @Override
+    public void curioTick(SlotContext slotContext, ItemStack stack) {
+
     }
 }

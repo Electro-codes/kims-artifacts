@@ -30,8 +30,7 @@ public class AlchemistBagRenderer implements ICurioRenderer {
             float headPitch) {
         LivingEntity entity = slotContext.entity();
         this.model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        this.model.renderCurioWithLag(matrixStack, renderTypeBuffer.getBuffer(this.model.renderType(TEXTURE)), light,
-                OverlayTexture.NO_OVERLAY,partialTicks, 1.0F, 1.0F, 1.0F, 1.0F,entity);
+        this.model.renderToBuffer(matrixStack, renderTypeBuffer.getBuffer(this.model.renderType(TEXTURE)), light, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
 }

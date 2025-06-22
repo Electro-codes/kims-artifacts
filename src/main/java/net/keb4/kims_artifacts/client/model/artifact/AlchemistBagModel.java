@@ -2,11 +2,13 @@
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 package net.keb4.kims_artifacts.client.model.artifact;
+import org.joml.Vector3f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.keb4.kims_artifacts.Main;
-import net.keb4.kims_artifacts.client.animation.AlchemistBagAnimation;
+
 import net.minecraft.client.animation.KeyframeAnimations;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
@@ -19,9 +21,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.schedule.Keyframe;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
-public class AlchemistBagModel<T extends Entity> extends HierarchicalModel<T> {
+public class AlchemistBagModel<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Main.MODID, "alchemistbag"), "main");
 	private final ModelPart Root;
@@ -29,15 +32,12 @@ public class AlchemistBagModel<T extends Entity> extends HierarchicalModel<T> {
 	private final ModelPart Flask2;
 	private final ModelPart Flask3;
 	private final ModelPart Flask4;
-	private final AnimationState idleAnimation = new AnimationState();
+	private float posx;
+	private float posy;
+	private float posz;
+	private Vector3f lerpVec;
 
-   	private Vec3 lastRenderedEntityPos = Vec3.ZERO; // Posição da entidade no último render
-    private Vec3 currentVisualPos = Vec3.ZERO; // Posição interpolada do modelo para o lag behind
-    private boolean lagInitialized = false; // Flag para inicializar o lag behind
 
-    // Constantes para o lag behind
-    private static final double SMOOTHING_FACTOR_LAG = 0.15; // Menor = mais lag; Maior = menos lag
-    private static final double MAX_LAG_OFFSET_MAGNITUDE = 0.5;
 
 	public AlchemistBagModel(ModelPart root) {
 		this.Root = root.getChild("Root");
@@ -80,68 +80,21 @@ public class AlchemistBagModel<T extends Entity> extends HierarchicalModel<T> {
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		// Initialize smoothed position on first tick
-		this.root().getAllParts().forEach(ModelPart::resetPose);
-		// Continue with your idle animation
-		this.animate(this.idleAnimation, AlchemistBagAnimation.Idle, ageInTicks);
+		this.Root.resetPose();
+		this.Flask.resetPose();
+		this.Flask2.resetPose();
+		this.Flask3.resetPose();
+		this.Flask4.resetPose();
+
+		this.Flask.y = Mth.cos(ageInTicks * 0.09F) * 0.10F; // Sway up and down
+		this.Flask2.y = Mth.cos(ageInTicks * 0.08F) * 0.07F; // Sway up and down
+		this.Flask3.y = Mth.cos(ageInTicks * 0.07F) * 0.06F; // Sway up and down
+		this.Flask4.y = Mth.cos(ageInTicks * 0.1F) * 0.08F; // Sway up
 	}
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		Root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
-
-	@Override
-	public ModelPart root() {
-		
-		return this.Root;
-	}
-	 public void renderCurioWithLag(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float partialTicks, float red, float green, float blue, float alpha,Entity entity) {
-        
-        // Posição alvo (onde o curio deveria estar *sem* lag)
-        // Usamos a posição interpolada da entidade que o usa.
-        double interpolatedX = Mth.lerp(partialTicks, entity.xOld, entity.getX());
-        double interpolatedY = Mth.lerp(partialTicks, entity.yOld, entity.getY());
-        double interpolatedZ = Mth.lerp(partialTicks, entity.zOld, entity.getZ());
-        Vec3 currentTargetPos = new Vec3(interpolatedX, interpolatedY, interpolatedZ);
-
-        // Inicializa currentVisualPos na primeira chamada
-        if (!lagInitialized) {
-            this.currentVisualPos = currentTargetPos;
-            lagInitialized = true;
-        }
-
-        // 1. Calcular a diferença (delta) entre a posição alvo e a posição visual atual
-        Vec3 delta = currentTargetPos.subtract(this.currentVisualPos);
-
-        // 2. Limitar o delta para evitar saltos muito grandes
-        if (delta.length() > MAX_LAG_OFFSET_MAGNITUDE) {
-            delta = delta.normalize().scale(MAX_LAG_OFFSET_MAGNITUDE);
-        }
-
-        // 3. Interpolar para a nova posição visual suave
-        // Multiplica pelo partialTicks para suavizar ainda mais entre os frames
-        Vec3 newVisualPos = this.currentVisualPos.add(delta.scale(SMOOTHING_FACTOR_LAG));
-
-        // 4. Atualizar a 'currentVisualPos' para o próximo frame
-        this.currentVisualPos = newVisualPos;
-
-        // 5. Calcular o offset a aplicar na PoseStack para criar o "lag"
-        // Este é o movimento que a PoseStack precisa fazer para que o modelo pareça estar atrasado.
-        Vec3 visualLagOffset = newVisualPos.subtract(currentTargetPos);
-
-        // --- Aplicar o offset na PoseStack antes de renderizar o modelo ---
-        poseStack.pushPose(); // Guarda o estado atual da PoseStack
-
-        // Aplica o deslocamento do lag behind.
-        // O `translate` moverá o modelo inteiro.
-        poseStack.translate(visualLagOffset.x, visualLagOffset.y, visualLagOffset.z);
-
-        // Chama o método `renderToBuffer` original para desenhar o modelo.
-        // As animações internas (keyframes) já foram aplicadas no `setupAnim`.
-        this.renderToBuffer(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-
-        poseStack.popPose(); // Restaura o estado anterior da PoseStack
-    }
 
 }
