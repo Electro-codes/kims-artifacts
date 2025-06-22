@@ -44,6 +44,7 @@ import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -106,29 +107,6 @@ public class ServerEventHandler {
                 float reduction = DamageFuncs.Point.funcDefault(lvl);
                 Main.LOGGER.info("artifact damage reduction: {}%", (1-reduction)*100);
                 event.setAmount(event.getAmount() * reduction);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void tick(TickEvent.ServerTickEvent event)
-    {
-        if (event.phase == TickEvent.Phase.END)
-        {
-            List<UUID> replace = new ArrayList<>();
-            ServerPacketHandlers.itemBrewStates.replaceAll(((uuid, aLong) ->
-            {
-                aLong -= 1;
-                if (aLong < 0)
-                {
-                    replace.add(uuid);
-                    return 0;
-                }
-                return aLong;
-            }));
-            for (UUID u : replace)
-            {
-                ServerPacketHandlers.itemBrewStates.remove(u);
             }
         }
     }

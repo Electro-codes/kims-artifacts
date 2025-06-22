@@ -1,6 +1,7 @@
 package net.keb4.kims_artifacts.network;
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.network.c2s.OpenPotionBagPacket;
 import net.keb4.kims_artifacts.network.c2s.PotionMixPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRStrongExplosionPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
@@ -75,6 +76,11 @@ public class PacketNetwork {
                 .encoder(PotionBagProgressSyncPacket::encode) // Method to write packet data
                 .decoder(PotionBagProgressSyncPacket::decode) // Method to read packet data
                 .consumerMainThread(PotionBagProgressSyncPacket::handle) // Method to process packet on the main thread
+                .add();
+        INSTANCE.messageBuilder(OpenPotionBagPacket.class, id())
+                .encoder(OpenPotionBagPacket::encode) // Method to write packet data
+                .decoder(OpenPotionBagPacket::decode) // Method to read packet data
+                .consumerMainThread(OpenPotionBagPacket::handle) // Method to process packet on the main thread
                 .add();
     }
 

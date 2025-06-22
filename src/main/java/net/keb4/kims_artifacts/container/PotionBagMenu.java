@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.container;
 
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
+import net.keb4.kims_artifacts.util.CurioHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -24,6 +25,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
         this.addent2 = this.addSlot(new SlotItemHandler(this.potionBagInvHandler, 1, 33,26));
         this.product = this.addSlot(new SlotItemHandler(this.potionBagInvHandler, 2, 23,45));
         this.tbd = this.addSlot(new SlotItemHandler(this.potionBagInvHandler, 3, 142,56));
+
 
         // Add player inventory slots
         // Player inventory (main 3 rows)
@@ -52,6 +54,10 @@ public class PotionBagMenu extends AbstractContainerMenu {
 
     private final Inventory playerInv;
 
+    public ItemStack getAssociatedStack() {
+        return this.associatedStack;
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int i) {
         return ItemStack.EMPTY;
@@ -59,7 +65,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return player.isHolding(ItemRegistry.POTION_BAG_ITEM.get());
+        return CurioHelper.wearingArtifactItem(player, ItemRegistry.POTION_BAG_ITEM.get());
     }
 
     @Override

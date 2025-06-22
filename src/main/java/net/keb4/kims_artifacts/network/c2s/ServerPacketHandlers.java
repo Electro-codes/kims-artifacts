@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.network.c2s;
 
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.container.PotionBagMenu;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
@@ -13,6 +14,7 @@ import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
+import net.keb4.kims_artifacts.system.artifact.potion.ServerPotionBagManager;
 import net.keb4.kims_artifacts.util.CurioHelper;
 import net.keb4.kims_artifacts.util.ExplosionHelper;
 import net.keb4.kims_artifacts.util.RayUtils;
@@ -23,6 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ExplosionDamageCalculator;
@@ -30,7 +33,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkHooks;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -118,28 +124,40 @@ public class ServerPacketHandlers {
     public static ServerPlayer player(Supplier<NetworkEvent.Context> ctx) {return ctx.get().getSender();}
 
 
-    public static HashMap<UUID, Integer> itemBrewStates = new HashMap<>();
-    public static int maxBrewTime = 200;
 
     public static void handlePotionMixPacket(PotionMixPacket message, Supplier<NetworkEvent.Context> contextSupplier)
     {
         ServerPlayer sender = contextSupplier.get().getSender();
-        Main.LOGGER.info("Successfully received packet from sender!");
-        boolean check = sender.getInventory().hasAnyOf(Set.of(ItemRegistry.POTION_BAG_ITEM.get()));
-        if (true)
-        {
-            List<ItemStack> bag = sender.getInventory().items.stream()
-                    .filter(stack -> stack.getItem() instanceof PotionBagItem)
-                    .collect(Collectors.toList());
-            if (bag.size() > 1 || bag.isEmpty())
-            {
-                sender.sendSystemMessage(Component.literal("Duplicate bags detected (or none at all)! Cancelling...").withStyle(ChatFormatting.RED));
-                return;
-            }
-            ItemStack bagItem = bag.get(0);
-            itemBrewStates.put(sender.getUUID(), maxBrewTime);
-            int progress = (itemBrewStates.get(sender.getUUID()) == null ? -1 : itemBrewStates.get(sender.getUUID()));
-            PacketNetwork.sendToPlayer(new PotionBagProgressSyncPacket(progress, sender.getUUID()), sender);
+        ItemStack stack = message.stack;
+        Main.LOGGER.info("Successfully received mix packet from sender!");
+
+        if (!(stack.getItem() instanceof PotionBagItem)) {
+            Main.LOGGER.error("Item is not a potionbagitem!");
+            return;
         }
+        ServerPotionBagManager.scheduleNewMix(sender, stack);
+
+
+
+    }
+
+    public static void handleOpenPotionBagPacket(OpenPotionBagPacket message, Supplier<NetworkEvent.Context> contextSupplier)
+    {
+        ServerPlayer sender = contextSupplier.get().getSender();
+        if (!CurioHelper.wearingArtifactItem(sender, ItemRegistry.POTION_BAG_ITEM.get())) return;
+
+        ItemStack bag = CurioHelper.getArtifactCurio(sender);
+        // Get or create the ItemStackHandler for this item stack
+        ItemStackHandler itemHandler = PotionBagItem.getOrCreateItemHandler(bag);
+
+        // Open the custom menu. The lambda provides the menu constructor with necessary data.
+        NetworkHooks.openScreen((sender),new SimpleMenuProvider(
+                (windowId, playerInventory, player) -> new PotionBagMenu(windowId, playerInventory, bag),
+                Component.translatable("container." + Main.MODID + ".potion_bag") // Title for the screen
+        ), (buf ->
+        {
+            buf.writeItem(bag);
+        }));
+
     }
 }

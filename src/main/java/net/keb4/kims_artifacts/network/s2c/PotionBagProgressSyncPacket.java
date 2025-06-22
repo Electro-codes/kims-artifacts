@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class PotionBagProgressSyncPacket {
 
     public int progress;
-    private UUID itemStackUUID;
+    public UUID itemStackUUID;
 
     public PotionBagProgressSyncPacket(FriendlyByteBuf buf) {
         this.progress = buf.readInt();
