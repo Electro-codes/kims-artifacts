@@ -9,7 +9,6 @@ import net.keb4.kims_artifacts.entity.capability.PlayerArtifactCapability;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ArtifactItem;
 import net.keb4.kims_artifacts.item.IArtifact;
-import net.keb4.kims_artifacts.item.ResonanceForkItem;
 import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -59,23 +58,6 @@ public class ServerEventHandler {
             if (!event.getObject().getCapability(CapRegistry.PLAYER_ARTIFACT_CAP).isPresent())
             {
                 event.addCapability(ResourceLocation.fromNamespaceAndPath(Main.MODID, PlayerArtifactCapProvider.REGISTRY_NAME), new PlayerArtifactCapProvider());
-            }
-        }
-    }
-
-    //supply brand new resonance values to new players only
-    @SubscribeEvent
-    public static void onLogin(PlayerEvent.PlayerLoggedInEvent event)
-    {
-        if (event.getEntity().level().isClientSide) return;
-        LazyOptional<IArtifactPlayerCap> capLazyOptional = event.getEntity().getCapability(CapRegistry.PLAYER_ARTIFACT_CAP);
-        if (capLazyOptional.isPresent())
-        {
-            IArtifactPlayerCap cap = capLazyOptional.resolve().get();
-
-            if (!cap.isInitializedAlready()) {
-                cap.setInitalized();
-                PlayerArtifactCapability.randomizeResonance((ServerPlayer) event.getEntity(), cap, 1);
             }
         }
     }

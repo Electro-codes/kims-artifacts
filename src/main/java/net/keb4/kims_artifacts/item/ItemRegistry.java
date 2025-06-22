@@ -27,8 +27,6 @@ public class ItemRegistry {
     public static final RegistryObject<Item> SMR_ITEM = registerArtifact("smr", SMRItem::new);
     public static final RegistryObject<Item> POTION_BAG_ITEM = registerArtifact("potion_bag", PotionBagItem::new);
 
-    public static final RegistryObject<Item> RESONANCE_FORK = ITEMS.register("resonance_fork", ResonanceForkItem::new);
-
     public static void register(IEventBus bus)
     {
         ITEMS.register(bus);

@@ -6,7 +6,6 @@ import net.keb4.kims_artifacts.network.c2s.SMRStrongExplosionPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
 import net.keb4.kims_artifacts.network.s2c.ManualDeltaSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.PotionBagProgressSyncPacket;
-import net.keb4.kims_artifacts.network.s2c.ResonanceSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
@@ -66,11 +65,6 @@ public class PacketNetwork {
                 .encoder(ScreenShakePacket::encode) // Method to write packet data
                 .decoder(ScreenShakePacket::decode) // Method to read packet data
                 .consumerMainThread(ScreenShakePacket::handle) // Method to process packet on the main thread
-                .add();
-        INSTANCE.messageBuilder(ResonanceSyncPacket.class, id())
-                .encoder(ResonanceSyncPacket::encode) // Method to write packet data
-                .decoder(ResonanceSyncPacket::decode) // Method to read packet data
-                .consumerMainThread(ResonanceSyncPacket::handle) // Method to process packet on the main thread
                 .add();
         INSTANCE.messageBuilder(PotionMixPacket.class, id())
                 .encoder(PotionMixPacket::encode) // Method to write packet data
