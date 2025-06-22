@@ -64,7 +64,9 @@
     ],
     "subtitle": "subtitles.kims_artifacts.smr_strongshot",
     "category": "player",
-    "attenuation_distance": 256
+    "attenuation_distance": 50,
+    "min_distance": 5,
+    "max_distance": 256
   },
   "vibration_very_low": {
     "sounds": [

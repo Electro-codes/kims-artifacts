@@ -1,8 +1,11 @@
 package net.keb4.kims_artifacts;
 
 import com.mojang.logging.LogUtils;
+
+import net.keb4.kims_artifacts.client.model.artifact.AlchemistBagModel;
 import net.keb4.kims_artifacts.client.model.artifact.SMRModel;
 import net.keb4.kims_artifacts.client.particle.ParticleTypes;
+import net.keb4.kims_artifacts.client.renderer.artifact.AlchemistBagRenderer;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.container.MenuRegistry;
@@ -86,6 +89,7 @@ public class Main
         // This is where you tell Minecraft about the structure of your model
         // Make sure smrModel.createMesh() returns a LayerDefinition
         event.registerLayerDefinition(SMRModel.LAYER_LOCATION, SMRModel::createBodyLayer);
+        event.registerLayerDefinition(AlchemistBagModel.LAYER_LOCATION, AlchemistBagModel::createBodyLayer);
         LOGGER.info("Registered model layer definition for {}", SMRModel.LAYER_LOCATION);
     }
 
@@ -105,6 +109,7 @@ public class Main
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             CuriosRendererRegistry.register( (Item)(ItemRegistry.SMR_ITEM.get()), SMRRenderer::new);
+            CuriosRendererRegistry.register((Item)(ItemRegistry.POTION_BAG_ITEM.get()), AlchemistBagRenderer::new);
 
             // Log a message to indicate that the client setup is complete
             LOGGER.info("Client setup complete for {}", MODID);

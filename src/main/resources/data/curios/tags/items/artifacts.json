@@ -1,6 +1,7 @@
 {
   "replace": true,
   "values": [
-    "kims_artifacts:smr"
+    "kims_artifacts:smr",
+    "kims_artifacts:potion_bag"
   ]
 }
