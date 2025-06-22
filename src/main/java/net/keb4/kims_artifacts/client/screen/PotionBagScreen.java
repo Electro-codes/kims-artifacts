@@ -2,32 +2,38 @@ package net.keb4.kims_artifacts.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.container.PotionBagMenu;
+import net.keb4.kims_artifacts.item.ItemRegistry;
+import net.keb4.kims_artifacts.item.artifacts.PotionBagItem;
 import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.keb4.kims_artifacts.network.c2s.PotionMixPacket;
+import net.keb4.kims_artifacts.util.CurioHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
+
+    public static int syncedProgress = 0;
+
     public PotionBagScreen(PotionBagMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 166;
         this.imageWidth = 176;
-
-        this.addRenderableWidget(Button.builder(Component.literal("Clear Slot 0"), (button) -> {
-            // When button is pressed, send a packet to the server
-            // We'll hardcode clearing slot 0 for demonstration.
-            // In a real mod, you'd send more context (e.g., slot to modify, action type).
-            PacketNetwork.sendToServer(new PotionMixPacket());
+        this.addRenderableWidget(Button.builder(Component.literal("e"), (button) -> {
+            if (CurioHelper.wearingArtifactItem(Minecraft.getInstance().player, ItemRegistry.POTION_BAG_ITEM.get())) {
+                PacketNetwork.sendToServer(new PotionMixPacket(CurioHelper.getArtifactCurio(Minecraft.getInstance().player)));
+            }
         })
                 .bounds(0,0,20,20)
                 .build());
     }
-
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MODID, "textures/gui/potion_bag_menu.png");
 
@@ -37,6 +43,10 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        int yLevelProgress = (int)((syncedProgress / (float)CommonConfig.potionBagBrewTime) * 13);
+        guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
+        if (syncedProgress == CommonConfig.potionBagBrewTime) syncedProgress = 0;
     }
 
     @Override

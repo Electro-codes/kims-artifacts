@@ -28,13 +28,6 @@ public class ArtifactItem extends Item implements IArtifact {
 
 
     @Override
-    public ItemStack getDefaultInstance() {
-        ItemStack stack = super.getDefaultInstance();
-        initializeArtifactItem(stack);
-        return stack;
-    }
-
-    @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
         if (pStack.getOrCreateTag().get(NBTHelper.ROOT_LOC_ARTIFACT) == null)
@@ -46,12 +39,7 @@ public class ArtifactItem extends Item implements IArtifact {
     private static void initializeArtifactItem(ItemStack stack)
     {
         stack.getOrCreateTag().put(NBTHelper.ROOT_LOC_ARTIFACT, new CompoundTag());
-        stack.getOrCreateTag().getCompound(NBTHelper.ROOT_LOC_ARTIFACT).putBoolean(IS_VIBRATING_LOCATION, true);
-    }
-
-    @Override
-    public float getDefaultResonance() {
-        return 0.5f;
+        stack.getOrCreateTag().getCompound(NBTHelper.ROOT_LOC_ARTIFACT).putBoolean(IS_VIBRATING_LOCATION, false);
     }
 
     public static void setVibrating(ItemStack stack, boolean b)

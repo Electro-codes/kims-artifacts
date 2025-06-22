@@ -2,7 +2,9 @@ package net.keb4.kims_artifacts.network.s2c;
 
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
+import net.keb4.kims_artifacts.client.screen.PotionBagScreen;
 import net.keb4.kims_artifacts.client.util.ParticleHelper;
+import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.entity.capability.CapRegistry;
 import net.keb4.kims_artifacts.entity.capability.IArtifactPlayerCap;
 import net.keb4.kims_artifacts.entity.capability.PlayerArtifactCapability;
@@ -69,19 +71,6 @@ public class ClientPacketHandlers {
 
     public static void handlePotionBagProgressSyncPacket(PotionBagProgressSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
     {
-        Main.LOGGER.info("Synced!");
-        ServerPlayer sender = contextSupplier.get().getSender();
-
-        List<ItemStack> potentials = sender.getInventory().items.stream()
-                .filter(stack -> stack.getItem() instanceof PotionBagItem)
-                .collect(Collectors.toList());
-
-        if (potentials.size() > 1)
-        {
-            return;
-        }
-        ItemStack bag = potentials.get(0);
-        bag.getOrCreateTag().putInt("Progress", message.progress);
-
+        PotionBagScreen.syncedProgress = CommonConfig.potionBagBrewTime - message.progress;
     }
 }

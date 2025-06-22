@@ -6,6 +6,7 @@ import net.keb4.kims_artifacts.item.ArtifactItem;
 import net.keb4.kims_artifacts.item.CurioArtifactItem;
 import net.keb4.kims_artifacts.util.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -22,7 +23,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class PotionBagItem extends CurioArtifactItem {
+public class PotionBagItem extends ArtifactItem {
 
 
 
@@ -69,21 +70,20 @@ public class PotionBagItem extends CurioArtifactItem {
         compoundTag.put("Inventory", handler.serializeNBT());
     }
 
-    @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-        if (pStack.getOrCreateTag().getCompound("Inventory") == null)
-        {
-            pStack.getOrCreateTag().getCompound("Inventory");
-            pStack.getOrCreateTag().putInt("Progress", -1);
-            pStack.getOrCreateTag().putUUID("uuid", UUID.randomUUID());
-        }
-    }
 
     @Override
-    public void onCraftedBy(ItemStack pStack, Level pLevel, Player pPlayer) {
-        // Ensure the NBT exists and potentially set up default inventory
-        super.onCraftedBy(pStack, pLevel, pPlayer);
+    public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        super.inventoryTick(stack, pLevel, pEntity, pSlotId, pIsSelected);
+        CompoundTag tag = stack.getOrCreateTag();
+        if (!tag.contains("Inventory", Tag.TAG_COMPOUND)) {
+            tag.put("Inventory", new CompoundTag());
+        }
+        if (!tag.contains("Progress", Tag.TAG_INT)) {
+            tag.putInt("Progress", -1);
+        }
+        if (!tag.contains("UUID", Tag.TAG_INT_ARRAY)) {
+            tag.putUUID("UUID", UUID.randomUUID());
+        }
     }
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {

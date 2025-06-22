@@ -20,7 +20,7 @@ public class Keybinds {
     public static boolean SMR_strongSelected = false;
 
 
-    public static final KeyMapping SMR_ACTIVATE = Util.buildKey("smr_activate", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C);
+    public static final KeyMapping ARTIFACT_ACTIVATE = Util.buildKey("artifact_activate", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C);
     public static final KeyMapping SMR_SWITCH = Util.buildKey("smr_switch", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K);
 
     @SubscribeEvent
