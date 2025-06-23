@@ -19,14 +19,20 @@ public class CommonConfig {
 
     public static int potionSyncPeriod = potionBagBrewTime/10;
 
+    public static int tippedWeaponUses = 4;
+
 
     private static final ForgeConfigSpec.DoubleValue SMR_RANGE = BUILDER
             .comment("SMR Artifact Raycast Range")
             .defineInRange("smrRange", 100.0D, 0D, 500D);
 
     private static final ForgeConfigSpec.IntValue POTION_BAG_BREW_TIME = BUILDER
-            .comment("Potion Bag Brew Time")
+            .comment("Potion bag brew time in ticks (20 = 1 second)")
             .defineInRange("potionBagBrewTime", 200, 10, Integer.MAX_VALUE);
+
+    private static final ForgeConfigSpec.IntValue TIPPED_WEAPON_USES = BUILDER
+            .comment("Amount of uses a tipped weapon has before it goes back to normal")
+            .defineInRange("tippedWeaponUses", 4, 1, Integer.MAX_VALUE);
 
 
 
@@ -40,6 +46,8 @@ public class CommonConfig {
     {
         smrRange = SMR_RANGE.get();
         potionBagBrewTime = POTION_BAG_BREW_TIME.get();
+        potionSyncPeriod = potionBagBrewTime / 10;
+        tippedWeaponUses = TIPPED_WEAPON_USES.get();
     }
 
     public static void register(FMLJavaModLoadingContext context)

@@ -42,11 +42,6 @@ public class ConcoctionItem extends PotionItem {
     }
 
 
-    @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-        PotionUtils.addPotionTooltip(pStack, pTooltipComponents, 1);
-    }
 
     @Override
     public int getUseDuration(ItemStack pStack) {

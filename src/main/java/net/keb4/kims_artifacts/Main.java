@@ -12,6 +12,7 @@ import net.keb4.kims_artifacts.container.MenuRegistry;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
+import net.keb4.kims_artifacts.recipe.RecipeRegistry;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -60,6 +61,7 @@ public class Main
         EnchantmentRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
         MenuRegistry.register(modEventBus);
+        RecipeRegistry.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

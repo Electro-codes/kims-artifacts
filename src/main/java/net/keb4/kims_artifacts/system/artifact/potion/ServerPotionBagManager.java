@@ -8,10 +8,11 @@ import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
 import net.keb4.kims_artifacts.network.s2c.PotionBagProgressSyncPacket;
 import net.keb4.kims_artifacts.util.CurioHelper;
+import net.keb4.kims_artifacts.util.NBTHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -94,7 +95,8 @@ public class ServerPotionBagManager {
 
 
             ItemStack out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
-            PotionUtils.setCustomEffects(out, PotionMixUtils.mix(i1, i2));
+            PotionUtils.setCustomEffects(out, PotionUtil.Mix.mix(i1, i2));
+            out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
             handler.insertItem(2, out, false);
             handler.extractItem(0, 1, false);
             handler.extractItem(1, 1, false);

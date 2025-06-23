@@ -3,6 +3,9 @@
   "item.kims_artifacts.smr": "Shoulder-Mounted Railgun",
   "item.kims_artifacts.test": "Testitem",
   "item.kims_artifacts.potion_bag": "Alchemical Bag",
+  "item.kims_artifacts.concoction": "Concoction",
+
+  "container.kims_artifacts.potion_bag": "Alchemical Bag",
 
 
 
