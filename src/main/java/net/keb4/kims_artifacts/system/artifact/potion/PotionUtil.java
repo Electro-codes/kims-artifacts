@@ -60,15 +60,9 @@ public class PotionUtil {
             List<MobEffectInstance> out = new ArrayList<>();
             List<MobEffectInstance> unmixed = new ArrayList<>();
             for (MobEffectInstance product : target) {
-                for (MobEffectInstance additive : addent) {
-                    if (product.getEffect() == additive.getEffect()) {
-                        out.add(new MobEffectInstance(product.getEffect(), product.getDuration() + additive.getDuration(), product.getAmplifier() + additive.getAmplifier()));
-                    } else {
-                        unmixed.add(additive);
-                    }
-                }
             }
-            out.addAll(unmixed);
+            out.addAll(target);
+            out.addAll(addent);
             return out;
         }
     }

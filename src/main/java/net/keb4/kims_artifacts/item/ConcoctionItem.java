@@ -1,5 +1,6 @@
 package net.keb4.kims_artifacts.item;
 
+import net.keb4.kims_artifacts.Main;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -38,7 +40,7 @@ import java.util.List;
 
 public class ConcoctionItem extends PotionItem {
     public ConcoctionItem() {
-        super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+        super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).defaultDurability(4));
     }
 
 
@@ -51,7 +53,7 @@ public class ConcoctionItem extends PotionItem {
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving) {
         Player $$3 = pEntityLiving instanceof Player ? (Player)pEntityLiving : null;
-        if ($$3 instanceof ServerPlayer) {
+        if ($$3 instanceof ServerPlayer player) {
             CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer)$$3, pStack);
         }
 
@@ -67,8 +69,11 @@ public class ConcoctionItem extends PotionItem {
 
         if ($$3 != null) {
             $$3.awardStat(Stats.ITEM_USED.get(this));
-            if (!$$3.getAbilities().instabuild) {
-                pStack.shrink(1);
+            if (!$$3.getAbilities().instabuild && $$3 instanceof ServerPlayer player) {
+                pStack.hurtAndBreak(1, player,(serverPlayer) ->
+                {
+                    Main.LOGGER.info("womp womp");
+                });
             }
         }
 
