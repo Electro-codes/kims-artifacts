@@ -3,6 +3,7 @@ package net.keb4.kims_artifacts.system.artifact.potion.application;
 import net.keb4.kims_artifacts.Main;
 import net.keb4.kims_artifacts.system.artifact.potion.PotionUtil;
 import net.keb4.kims_artifacts.util.NBTHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,14 +21,17 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 
+/**Handles all tipped weapon events**/
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class TippedWeaponEventHandler {
 
     @SubscribeEvent
     public static void onHurt(LivingHurtEvent event)
     {
+        //null + clientside check
         if (event.getEntity().level().isClientSide) return;
         if (event.getSource().getEntity() == null) return;
+
 
         if (event.getSource().getEntity() instanceof Player player)
         {
@@ -60,7 +64,7 @@ public class TippedWeaponEventHandler {
             {
                 List<MobEffectInstance> instances = PotionUtils.getCustomEffects(t.getCompound(NBTHelper.TIPPED_WEAPON_LOC));
                 List<Component> toBeAdded = new ArrayList<>();
-                toBeAdded.add(Component.literal("Tipped Weapon"));
+                toBeAdded.add(Component.literal("Tipped Weapon").withStyle(ChatFormatting.AQUA));
                 toBeAdded.add(Component.literal("Uses: " + t.getCompound(NBTHelper.TIPPED_WEAPON_LOC).getInt("Uses")));
                 PotionUtil.appendTooltipWithoutApplied(instances, toBeAdded, 1);
                 event.getToolTip().addAll(2, toBeAdded);

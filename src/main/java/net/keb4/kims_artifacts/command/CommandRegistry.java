@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Iterator;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -37,15 +38,10 @@ public class CommandRegistry {
     public static int artifactGenData(CommandContext<CommandSourceStack> ctx)
     {
         ResourceLocation location = ResourceLocation.parse(StringArgumentType.getString(ctx, "resourceLocation"));
-        if (ForgeRegistries.ITEMS.getValue(location) == null) return 0;
-        Set<RegistryObject<Item>> i = ItemRegistry.getArtifacts();
-        for (RegistryObject<Item> item : i)
+
+        for (RegistryObject<Item> i : ItemRegistry.getArtifacts())
         {
-            if (item.getId() == location)
-            {
-                Main.LOGGER.info("found item!");
-                ArtifactGenData.get(ctx.getSource().getLevel()).setGenerated(location);
-            }
+            ArtifactGenData.get(ctx.getSource().getLevel()).setGenerated(i.getId());
         }
         return 1;
     }

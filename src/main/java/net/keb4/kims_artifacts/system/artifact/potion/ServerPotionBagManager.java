@@ -13,8 +13,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,18 +31,25 @@ public class ServerPotionBagManager {
     //format is player:item, remaining
     private static HashMap<Pair<UUID, UUID>, Integer> cooldownList = new HashMap<>();
 
+    //get max cooldown from config
     public static final int maxCooldown = CommonConfig.potionBagBrewTime;
 
 
+    //add a mix to the cooldown map
     public static void scheduleNewMix(ServerPlayer sender, ItemStack stack)
     {
+        //basically a pair of player and random UUIDs (I might deimplement this since theres only gonna be one artifact, but we'll see)
         Pair<UUID, UUID> p = new Pair<>(sender.getUUID(), UUID.randomUUID());
         cooldownList.put(p, maxCooldown);
     }
 
+    //runs every tick on server
     @SubscribeEvent
     public static void tick(TickEvent.ServerTickEvent tickEvent)
     {
+        //if statements:
+        //ticks have two phases so you have to make sure you're only hooking into one, or itll run twice.
+        //every x ticks run this list
         if (tickEvent.phase == TickEvent.Phase.END && tickEvent.getServer().getTickCount() % CommonConfig.potionSyncPeriod == 0) {
             //for each entry logged in list
             for (Pair<UUID,UUID> pair : cooldownList.keySet()) {
@@ -63,7 +72,7 @@ public class ServerPotionBagManager {
                 if (cooldownList.get(pair) <= 0) {
                     //remove it from cooldown
                     cooldownList.remove(pair);
-                    //add any final code here
+                    //add any on-completion code here
                     finishBrew(p, tickEvent);
                 }
             }
@@ -85,22 +94,34 @@ public class ServerPotionBagManager {
 
     private static void finishBrew(ServerPlayer p, TickEvent.ServerTickEvent event)
     {
+        //get curio
         ItemStack bag = CurioHelper.getArtifactCurio(p);
+
+        //if the bag has an inventory/is present (it definitely should)
         bag.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler ->
         {
-            //mixing only works with potions
+            //filter allowed items to only items extending potionitem
             if (!(handler.getStackInSlot(0).getItem() instanceof PotionItem && handler.getStackInSlot(1).getItem() instanceof PotionItem)) return;
+
+            //get mobeffects for each of the two potion slots (third is WIP)
             List<MobEffectInstance> i1 = PotionUtils.getMobEffects(handler.getStackInSlot(0));
             List<MobEffectInstance> i2 = PotionUtils.getMobEffects(handler.getStackInSlot(1));
 
 
+            //new concoction instance
             ItemStack out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
+            //add custom effects through forge's api for custom effects
             PotionUtils.setCustomEffects(out, PotionUtil.Mix.mix(i1, i2));
+            //add concoction metadata (not used for anything yet but may be useful later)
             out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
+            //add or subtract items
             handler.insertItem(2, out, false);
             handler.extractItem(0, 1, false);
             handler.extractItem(1, 1, false);
+            handler.insertItem(0, Items.GLASS_BOTTLE.getDefaultInstance(), false);
+            handler.insertItem(1, Items.GLASS_BOTTLE.getDefaultInstance(), false);
 
+            //sync menu/itemhandler changes to menu if its open
             if (p.containerMenu instanceof PotionBagMenu menu)
             {
                 menu.broadcastChanges();

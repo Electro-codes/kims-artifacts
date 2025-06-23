@@ -55,6 +55,7 @@ public class PotionUtil {
         /**
          * @param target The mob effect list to be added to.
          * @param addent The mob effect list which will be sacrificed.
+         * @apiNote Kim you can add your own potion mixing logic in here, mine kinda sucks I didn't spend too much time on it
          * **/
         public static List<MobEffectInstance> mix(List<MobEffectInstance> target, List<MobEffectInstance> addent) {
             List<MobEffectInstance> out = new ArrayList<>();

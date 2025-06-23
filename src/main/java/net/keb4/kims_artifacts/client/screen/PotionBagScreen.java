@@ -58,7 +58,7 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
     protected void init() {
         super.init();
         this.titleLabelX = 8; // Position for the inventory title
-        this.titleLabelY = 2;
+        this.titleLabelY = 3;
         this.inventoryLabelX = 8; // Position for the player inventory title
     }
 

@@ -45,6 +45,7 @@ public class ConcoctionItem extends PotionItem {
 
 
 
+    //mostly overrides of behavior of the potionitem class
     @Override
     public int getUseDuration(ItemStack pStack) {
         return 32;
@@ -72,18 +73,9 @@ public class ConcoctionItem extends PotionItem {
             if (!$$3.getAbilities().instabuild && $$3 instanceof ServerPlayer player) {
                 pStack.hurtAndBreak(1, player,(serverPlayer) ->
                 {
-                    Main.LOGGER.info("womp womp");
+                    serverPlayer.addItem(new ItemStack(Items.GLASS_BOTTLE));
                 });
-            }
-        }
 
-        if ($$3 == null || !$$3.getAbilities().instabuild) {
-            if (pStack.isEmpty()) {
-                return new ItemStack(Items.GLASS_BOTTLE);
-            }
-
-            if ($$3 != null) {
-                $$3.getInventory().add(new ItemStack(Items.GLASS_BOTTLE));
             }
         }
 
