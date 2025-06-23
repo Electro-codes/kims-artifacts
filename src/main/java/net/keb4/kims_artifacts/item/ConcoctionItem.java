@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ConcoctionItem extends Item {
+public class ConcoctionItem extends PotionItem {
     public ConcoctionItem() {
         super(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     }
@@ -127,6 +127,11 @@ public class ConcoctionItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
         return ItemUtils.startUsingInstantly(pLevel, pPlayer, pHand);
+    }
+
+    @Override
+    public String getDescriptionId(ItemStack pStack) {
+        return this.getDescriptionId();
     }
 
 }

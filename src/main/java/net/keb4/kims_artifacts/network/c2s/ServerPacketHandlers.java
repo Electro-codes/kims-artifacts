@@ -29,6 +29,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -129,16 +130,21 @@ public class ServerPacketHandlers {
     public static void handlePotionMixPacket(PotionMixPacket message, Supplier<NetworkEvent.Context> contextSupplier)
     {
         ServerPlayer sender = contextSupplier.get().getSender();
-        ItemStack stack = message.stack;
-        Main.LOGGER.info("Successfully received mix packet from sender!");
+        if (sender.containerMenu instanceof PotionBagMenu menu)
+        {
+            ItemStack stack = message.stack;
 
-        if (!(stack.getItem() instanceof PotionBagItem)) {
-            Main.LOGGER.error("Item is not a potionbagitem!");
-            return;
+            if (!(menu.getSlot(0).getItem().getItem() instanceof PotionItem && menu.getSlot(1).getItem().getItem() instanceof PotionItem)) {
+                Main.LOGGER.error("Invalid recipe!");
+                return;
+            }
+
+            if (!(stack.getItem() instanceof PotionBagItem)) {
+                Main.LOGGER.error("Item is not a potionbagitem!");
+                return;
+            }
+            ServerPotionBagManager.scheduleNewMix(sender, stack);
         }
-        ServerPotionBagManager.scheduleNewMix(sender, stack);
-
-
 
     }
 
