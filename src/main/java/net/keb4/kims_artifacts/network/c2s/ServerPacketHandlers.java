@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.network.c2s;
 
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.capability.CapRegistry;
 import net.keb4.kims_artifacts.container.PotionBagMenu;
 import net.keb4.kims_artifacts.entity.damage.DamageTypes;
 import net.keb4.kims_artifacts.item.ItemRegistry;
@@ -148,7 +149,6 @@ public class ServerPacketHandlers {
 
         ItemStack bag = CurioHelper.getArtifactCurio(sender);
         // Get or create the ItemStackHandler for this item stack
-        ItemStackHandler itemHandler = PotionBagItem.getOrCreateItemHandler(bag);
 
         // Open the custom menu. The lambda provides the menu constructor with necessary data.
         NetworkHooks.openScreen((sender),new SimpleMenuProvider(

@@ -1,10 +1,13 @@
 package net.keb4.kims_artifacts.network.s2c;
 
+import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.capability.CapRegistry;
 import net.keb4.kims_artifacts.client.renderer.ScreenShakeRenderer;
 import net.keb4.kims_artifacts.client.util.ParticleHelper;
 import net.keb4.kims_artifacts.item.artifacts.SMRItem;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
+import net.keb4.kims_artifacts.util.CurioHelper;
 import net.keb4.kims_artifacts.util.RayUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
@@ -60,7 +63,12 @@ public class ClientPacketHandlers {
 
     public static void handlePotionBagProgressSyncPacket(PotionBagProgressSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)
     {
-
+        Main.LOGGER.info("Received initial packet.");
+        CurioHelper.getArtifactCurio(Minecraft.getInstance().player).getCapability(CapRegistry.POTION_BAG_BEHAVIOR_CAP).ifPresent((iPotionBagBehavior ->
+        {
+            iPotionBagBehavior.setProgress(message.progress);
+            Main.LOGGER.info("Received progress {}",message.progress);
+        }));
     }
 
     public static void handleArtifactSlotSyncPacket(ArtifactSlotSyncPacket message, Supplier<NetworkEvent.Context> contextSupplier)

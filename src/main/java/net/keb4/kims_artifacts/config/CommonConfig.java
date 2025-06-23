@@ -2,13 +2,11 @@ package net.keb4.kims_artifacts.config;
 
 import net.keb4.kims_artifacts.Main;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.xml.sax.SAXParseException;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonConfig {
@@ -19,7 +17,7 @@ public class CommonConfig {
 
     public static int potionBagBrewTime = 200; // 10 seconds
 
-    public static int syncPeriod = potionBagBrewTime/10;
+    public static int potionSyncPeriod = potionBagBrewTime/10;
 
 
     private static final ForgeConfigSpec.DoubleValue SMR_RANGE = BUILDER
@@ -28,7 +26,7 @@ public class CommonConfig {
 
     private static final ForgeConfigSpec.IntValue POTION_BAG_BREW_TIME = BUILDER
             .comment("Potion Bag Brew Time")
-            .defineInRange("potionBagBrewTime", 200, 20, Integer.MAX_VALUE);
+            .defineInRange("potionBagBrewTime", 200, 10, Integer.MAX_VALUE);
 
 
 

@@ -2,6 +2,7 @@ package net.keb4.kims_artifacts.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.capability.CapRegistry;
 import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.container.PotionBagMenu;
 import net.keb4.kims_artifacts.item.ItemRegistry;
@@ -18,16 +19,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
+import java.io.ObjectInputFilter;
+
 public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
 
-    public static int syncedProgress = 0;
 
     public PotionBagScreen(PotionBagMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         //gui size
         this.imageHeight = 166;
         this.imageWidth = 176;
-
         // button
         this.addRenderableWidget(Button.builder(Component.literal("Brew"), (button) -> {
             if (CurioHelper.wearingArtifactItem(Minecraft.getInstance().player, ItemRegistry.POTION_BAG_ITEM.get())) {
@@ -39,18 +40,18 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
     }
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Main.MODID, "textures/gui/potion_bag_menu.png");
-
+    private int progress = 0;
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
-
+        this.progress = CommonConfig.potionBagBrewTime - this.menu.getProgress();
         //basic render
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
-        //RenderSystem.setShaderTexture(0, TEXTURE);
-        //int yLevelProgress = (int)((progress / (float)CommonConfig.potionBagBrewTime) * 13);
-        //guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        int yLevelProgress = (int)((this.progress / (float)CommonConfig.potionBagBrewTime) * 13);
+        guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
     }
 
     @Override
@@ -66,4 +67,6 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
     }
+
+
 }
