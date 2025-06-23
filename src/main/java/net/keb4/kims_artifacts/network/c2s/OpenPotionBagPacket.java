@@ -5,6 +5,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**Lets the server know a potion bag was opened clientside**/
 public class OpenPotionBagPacket {
 
     public OpenPotionBagPacket() {

@@ -1,12 +1,11 @@
-package net.keb4.kims_artifacts.entity.capability;
+package net.keb4.kims_artifacts.capability.entity;
 
-import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.capability.CapRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import org.checkerframework.checker.units.qual.C;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

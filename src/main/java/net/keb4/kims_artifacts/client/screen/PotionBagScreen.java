@@ -24,14 +24,17 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
 
     public PotionBagScreen(PotionBagMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
+        //gui size
         this.imageHeight = 166;
         this.imageWidth = 176;
-        this.addRenderableWidget(Button.builder(Component.literal("e"), (button) -> {
+
+        // button
+        this.addRenderableWidget(Button.builder(Component.literal("Brew"), (button) -> {
             if (CurioHelper.wearingArtifactItem(Minecraft.getInstance().player, ItemRegistry.POTION_BAG_ITEM.get())) {
                 PacketNetwork.sendToServer(new PotionMixPacket(CurioHelper.getArtifactCurio(Minecraft.getInstance().player)));
             }
         })
-                .bounds(0,0,20,20)
+                .bounds(0,0,60,20)
                 .build());
     }
 
@@ -39,14 +42,15 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float v, int i, int i1) {
+
+        //basic render
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        int yLevelProgress = (int)((syncedProgress / (float)CommonConfig.potionBagBrewTime) * 13);
-        guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
-        if (syncedProgress == CommonConfig.potionBagBrewTime) syncedProgress = 0;
+        //RenderSystem.setShaderTexture(0, TEXTURE);
+        //int yLevelProgress = (int)((progress / (float)CommonConfig.potionBagBrewTime) * 13);
+        //guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
     }
 
     @Override

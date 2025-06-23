@@ -1,5 +1,6 @@
 package net.keb4.kims_artifacts.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -32,5 +33,9 @@ public class CurioHelper {
         return stack;
     }
 
+    public static void setItemInArtifact(Player player,ItemStack stack)
+    {
+        CuriosApi.getCuriosInventory(player).resolve().get().getCurios().get("artifacts").getStacks().setStackInSlot(0, stack);
+    }
 
 }

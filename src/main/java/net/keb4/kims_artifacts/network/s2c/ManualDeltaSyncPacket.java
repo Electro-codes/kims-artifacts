@@ -6,6 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**Manually syncs delta movement in ways vanilla cannot.**/
 public class ManualDeltaSyncPacket {
 
     public final Vec3 delta;

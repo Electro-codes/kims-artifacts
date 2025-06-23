@@ -6,6 +6,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+/**Lets the server know to schedule a mixing request**/
 public class PotionMixPacket {
 
     public final ItemStack stack;

@@ -28,7 +28,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
-import net.keb4.kims_artifacts.entity.capability.CapRegistry; //keep this here
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(Main.MODID)

@@ -8,6 +8,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+/**Syncs the potion bag menu progress with the server.**/
 public class PotionBagProgressSyncPacket {
 
     public int progress;

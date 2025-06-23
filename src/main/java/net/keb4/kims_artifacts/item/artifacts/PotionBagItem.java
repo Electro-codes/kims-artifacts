@@ -16,77 +16,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
-import top.theillusivec4.curios.api.SlotContext;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public class PotionBagItem extends ArtifactItem {
+public class PotionBagItem extends CurioArtifactItem {
 
-
-
-
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-
-        if (!pLevel.isClientSide) {
-            // Get or create the ItemStackHandler for this item stack
-            ItemStackHandler itemHandler = getOrCreateItemHandler(itemStack);
-
-            // Open the custom menu. The lambda provides the menu constructor with necessary data.
-            NetworkHooks.openScreen(((ServerPlayer) pPlayer),new SimpleMenuProvider(
-                    (windowId, playerInventory, player) -> new PotionBagMenu(windowId, playerInventory, itemStack),
-                    Component.translatable("container." + Main.MODID + ".potion_bag") // Title for the screen
-            ), (buf ->
-            {
-                buf.writeItem(itemStack);
-            }));
-        }
-        return InteractionResultHolder.sidedSuccess(itemStack, pLevel.isClientSide());
-    }
-
-
-    public static ItemStackHandler getOrCreateItemHandler(@Nonnull ItemStack stack) {
-        // Ensure the item has NBT data
-        CompoundTag compoundTag = stack.getOrCreateTag();
-        // Get the handler, or create a new one if it doesn't exist
-        ItemStackHandler itemHandler = new ItemStackHandler(4);
-
-        // Load existing inventory data if available
-        if (compoundTag.contains("Inventory")) {
-            itemHandler.deserializeNBT(compoundTag.getCompound("Inventory"));
-
-        }
-        return itemHandler;
-    }
-
-    public static void saveItemHandler(@Nonnull ItemStack stack, @Nonnull ItemStackHandler handler) {
-        CompoundTag compoundTag = stack.getOrCreateTag();
-        // Serialize the handler's data and put it into the "Inventory" tag
-        compoundTag.put("Inventory", handler.serializeNBT());
-    }
-
-
-    @Override
-    public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        super.inventoryTick(stack, pLevel, pEntity, pSlotId, pIsSelected);
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("Inventory", Tag.TAG_COMPOUND)) {
-            tag.put("Inventory", new CompoundTag());
-        }
-        if (!tag.contains("Progress", Tag.TAG_INT)) {
-            tag.putInt("Progress", -1);
-        }
-        if (!tag.contains("UUID", Tag.TAG_INT_ARRAY)) {
-            tag.putUUID("UUID", UUID.randomUUID());
-        }
-    }
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-
-    }
 }

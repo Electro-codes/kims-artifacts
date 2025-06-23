@@ -1,6 +1,7 @@
-package net.keb4.kims_artifacts.entity.capability;
+package net.keb4.kims_artifacts.capability;
 
 import net.keb4.kims_artifacts.Main;
+import net.keb4.kims_artifacts.capability.entity.IArtifactPlayerCap;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

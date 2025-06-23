@@ -8,6 +8,7 @@ import net.minecraftforge.network.NetworkEvent;
 import javax.naming.Context;
 import java.util.function.Supplier;
 
+/**Begins screen shake of specified strength, duration, and intensity on the client**/
 public class ScreenShakePacket {
 
     public final float strength;

@@ -5,6 +5,7 @@ import net.keb4.kims_artifacts.network.c2s.OpenPotionBagPacket;
 import net.keb4.kims_artifacts.network.c2s.PotionMixPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRStrongExplosionPacket;
 import net.keb4.kims_artifacts.network.c2s.SMRWeakExplosionPacket;
+import net.keb4.kims_artifacts.network.s2c.ArtifactSlotSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.ManualDeltaSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.PotionBagProgressSyncPacket;
 import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
@@ -81,6 +82,11 @@ public class PacketNetwork {
                 .encoder(OpenPotionBagPacket::encode) // Method to write packet data
                 .decoder(OpenPotionBagPacket::decode) // Method to read packet data
                 .consumerMainThread(OpenPotionBagPacket::handle) // Method to process packet on the main thread
+                .add();
+        INSTANCE.messageBuilder(ArtifactSlotSyncPacket.class, id())
+                .encoder(ArtifactSlotSyncPacket::encode) // Method to write packet data
+                .decoder(ArtifactSlotSyncPacket::decode) // Method to read packet data
+                .consumerMainThread(ArtifactSlotSyncPacket::handle) // Method to process packet on the main thread
                 .add();
     }
 
