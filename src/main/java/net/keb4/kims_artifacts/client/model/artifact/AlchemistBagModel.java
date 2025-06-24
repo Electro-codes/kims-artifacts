@@ -32,12 +32,18 @@ public class AlchemistBagModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart Flask2;
 	private final ModelPart Flask3;
 	private final ModelPart Flask4;
-	private float posx;
-	private float posy;
-	private float posz;
-	private Vector3f lerpVec;
-
-
+	private float flask1y = 0;
+	private float flask2y = 0;
+	private float flask3y = 0;
+	private float flask4y = 0;
+	private float flask1z = 0;
+	private float flask2z = 0;
+	private float flask3z = 0;
+	private float flask4z = 0;
+	Vec2 lookDirection = Vec2.ZERO;
+	Vec2 moveDirection = Vec2.ZERO;
+	private float dotProduct = 0;
+	
 
 	public AlchemistBagModel(ModelPart root) {
 		this.Root = root.getChild("Root");
@@ -85,11 +91,36 @@ public class AlchemistBagModel<T extends Entity> extends EntityModel<T> {
 		this.Flask2.resetPose();
 		this.Flask3.resetPose();
 		this.Flask4.resetPose();
+		boolean initialized = false;
 
-		this.Flask.y = Mth.cos(ageInTicks * 0.09F) * 0.10F; // Sway up and down
-		this.Flask2.y = Mth.cos(ageInTicks * 0.08F) * 0.07F; // Sway up and down
-		this.Flask3.y = Mth.cos(ageInTicks * 0.07F) * 0.06F; // Sway up and down
-		this.Flask4.y = Mth.cos(ageInTicks * 0.1F) * 0.08F; // Sway up
+		if (!initialized) {
+			flask1y = this.Flask.y; // Initialize the y position of Flask
+			flask2y = this.Flask2.y; // Initialize the y position of Flask2
+			flask3y = this.Flask3.y; // Initialize the y position of Flask3
+			flask4y = this.Flask4.y; // Initialize the y position of Flask4
+			flask1z = this.Flask.z; // Initialize the z position of Flask
+			flask2z = this.Flask2.z; // Initialize the z position of Flask2
+			flask3z = this.Flask3.z; // Initialize the z position of Flask3
+			flask4z = this.Flask4.z; // Initialize the z position
+			initialized = true;
+		}
+
+		moveDirection = new Vec2((float)entity.getDeltaMovement().x, (float)entity.getDeltaMovement().z);
+		lookDirection = new Vec2((float)entity.getLookAngle().x, (float)entity.getLookAngle().z);
+		dotProduct = lookDirection.dot(moveDirection);
+		if (dotProduct >= 0) {
+		this.Flask.z = flask1z + limbSwingAmount * 6;
+		this.Flask2.z = flask2z + limbSwingAmount * 7;
+		this.Flask3.z = flask3z + limbSwingAmount * 9;
+		this.Flask4.z = flask4z + limbSwingAmount * 8;
+		}
+		
+		this.Root.y = 24.0F + (float) entity.getDeltaMovement().y * 2.25F;
+
+		this.Flask.y = flask1y  + Mth.cos(ageInTicks * 0.09F) * 1.5F; // Sway up and down
+		this.Flask2.y = flask2y  + Mth.cos(ageInTicks * 0.08F) * 1.1F; // Sway up and down
+		this.Flask3.y = flask3y  + Mth.cos(ageInTicks * 0.07F) * 0.9F; // Sway up and down
+		this.Flask4.y = flask4y  + Mth.cos(ageInTicks * 0.1F) * 1.2F; // Sway up
 	}
 
 	@Override

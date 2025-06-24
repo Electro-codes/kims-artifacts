@@ -21,7 +21,7 @@ public class RecipeRegistry {
             SERIALIZERS.register("tipped_sword", TippedSwordRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<TippedSwordRecipe>> TIPPED_SWORD_RECIPE_TYPE =
-            TYPES.register("tipped_sword", () -> new RecipeType<>() {
+            TYPES.register("tipped_sword", () -> new RecipeType<TippedSwordRecipe>() {
                 public String toString() {
                     return Main.MODID + ":" + "tipped_sword";
                 }

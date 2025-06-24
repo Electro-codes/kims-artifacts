@@ -1,6 +1,6 @@
 package net.keb4.kims_artifacts.system.artifact.potion;
 
-import javafx.util.Pair;
+
 import net.keb4.kims_artifacts.capability.CapRegistry;
 import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.container.PotionBagMenu;
@@ -29,7 +29,7 @@ import java.util.*;
 public class ServerPotionBagManager {
 
     //format is player:item, remaining
-    private static HashMap<Pair<UUID, UUID>, Integer> cooldownList = new HashMap<>();
+    private static HashMap<UUID, Integer> cooldownList = new HashMap<>();
 
     //get max cooldown from config
     public static final int maxCooldown = CommonConfig.potionBagBrewTime;
@@ -39,8 +39,8 @@ public class ServerPotionBagManager {
     public static void scheduleNewMix(ServerPlayer sender, ItemStack stack)
     {
         //basically a pair of player and random UUIDs (I might deimplement this since theres only gonna be one artifact, but we'll see)
-        Pair<UUID, UUID> p = new Pair<>(sender.getUUID(), UUID.randomUUID());
-        cooldownList.put(p, maxCooldown);
+        
+        cooldownList.put(sender.getUUID(), maxCooldown);
     }
 
     //runs every tick on server
@@ -52,16 +52,16 @@ public class ServerPotionBagManager {
         //every x ticks run this list
         if (tickEvent.phase == TickEvent.Phase.END && tickEvent.getServer().getTickCount() % CommonConfig.potionSyncPeriod == 0) {
             //for each entry logged in list
-            for (Pair<UUID,UUID> pair : cooldownList.keySet()) {
+            for (UUID uuid : cooldownList.keySet()) {
                 //get player
-                ServerPlayer p = tickEvent.getServer().getPlayerList().getPlayer(pair.getKey());
+                ServerPlayer p = tickEvent.getServer().getPlayerList().getPlayer(uuid);
                 //get amount remaining
-                int amt = cooldownList.getOrDefault(pair, 0);
+                int amt = cooldownList.getOrDefault(uuid, 0);
                 //(serverside) decrement an unsynced copy of the curio item
                 CurioHelper.getArtifactCurio(p).getCapability(CapRegistry.POTION_BAG_BEHAVIOR_CAP).ifPresent(iPotionBagBehavior -> iPotionBagBehavior.setProgress(amt));
 
                 //sync changes
-                PacketNetwork.sendToPlayer(new PotionBagProgressSyncPacket(amt, pair.getValue()), tickEvent.getServer().getPlayerList().getPlayer(pair.getKey()));
+                PacketNetwork.sendToPlayer(new PotionBagProgressSyncPacket(amt, uuid), tickEvent.getServer().getPlayerList().getPlayer(uuid));
                 //if the container is open sync changes there too
                 if (p.containerMenu instanceof PotionBagMenu menu)
                 {
@@ -69,9 +69,9 @@ public class ServerPotionBagManager {
                 }
 
                 //if an entry cooldown is completed,
-                if (cooldownList.get(pair) <= 0) {
+                if (cooldownList.get(uuid) <= 0) {
                     //remove it from cooldown
-                    cooldownList.remove(pair);
+                    cooldownList.remove(uuid);
                     //add any on-completion code here
                     finishBrew(p, tickEvent);
                 }
