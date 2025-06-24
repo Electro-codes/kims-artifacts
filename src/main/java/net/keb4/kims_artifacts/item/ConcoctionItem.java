@@ -72,9 +72,7 @@ public class ConcoctionItem extends PotionItem {
             $$3.awardStat(Stats.ITEM_USED.get(this));
             if (!$$3.getAbilities().instabuild && $$3 instanceof ServerPlayer player) {
                 pStack.hurtAndBreak(1, player,(serverPlayer) ->
-                {
-                    serverPlayer.addItem(new ItemStack(Items.GLASS_BOTTLE));
-                });
+                {});
 
             }
         }
