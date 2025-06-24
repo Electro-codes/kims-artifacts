@@ -44,6 +44,7 @@ public class AlchemistBagModel<T extends Entity> extends EntityModel<T> {
 	Vec2 moveDirection = Vec2.ZERO;
 	private float dotProduct = 0;
 	
+	
 
 	public AlchemistBagModel(ModelPart root) {
 		this.Root = root.getChild("Root");
