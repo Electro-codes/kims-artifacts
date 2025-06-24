@@ -50,8 +50,8 @@ public class PotionBagScreen extends AbstractContainerScreen<PotionBagMenu> {
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
         RenderSystem.setShaderTexture(0, TEXTURE);
-        int yLevelProgress = (int)((this.progress / (float)CommonConfig.potionBagBrewTime) * 13);
-        guiGraphics.blit(TEXTURE,x + 17, y+43, 176,0, 28, yLevelProgress);
+        int yLevelProgress = (int)((this.progress / (float)CommonConfig.potionBagBrewTime) * 28);
+        guiGraphics.blit(TEXTURE,x + 19, y+44, 176,0, 9, yLevelProgress);
     }
 
     @Override

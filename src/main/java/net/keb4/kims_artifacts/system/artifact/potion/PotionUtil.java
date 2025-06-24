@@ -60,8 +60,6 @@ public class PotionUtil {
         public static List<MobEffectInstance> mix(List<MobEffectInstance> target, List<MobEffectInstance> addent) {
             List<MobEffectInstance> out = new ArrayList<>();
             List<MobEffectInstance> unmixed = new ArrayList<>();
-            for (MobEffectInstance product : target) {
-            }
             out.addAll(target);
             out.addAll(addent);
             return out;

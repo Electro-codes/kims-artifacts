@@ -84,21 +84,28 @@ public class PotionBagMenu extends AbstractContainerMenu {
 
     public void buildSlots(IItemHandler itemhandler)
     {
-        this.addSlot(new SlotItemHandler(itemhandler, 0, 13,26)
+        this.addSlot(new SlotItemHandler(itemhandler, 0, 8,20)
         {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() instanceof PotionItem;
             }
         });
-        this.addSlot(new SlotItemHandler(itemhandler, 1, 33,26){
+        this.addSlot(new SlotItemHandler(itemhandler, 1, 31,13){
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() instanceof PotionItem;
             }
         });
-        this.addSlot(new SlotItemHandler(itemhandler, 2, 23,45));
-        this.addSlot(new SlotItemHandler(itemhandler, 3, 143,57));
+        this.addSlot(new SlotItemHandler(itemhandler, 2, 54,20){
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.getItem() instanceof PotionItem;
+            }
+        });
+        this.addSlot(new SlotItemHandler(itemhandler, 3, 31,54));
+        this.addSlot(new SlotItemHandler(itemhandler, 4, 85,20));
+        this.addSlot(new SlotItemHandler(itemhandler, 5, 85,54));
     }
 
     public int getProgress() {

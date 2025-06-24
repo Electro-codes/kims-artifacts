@@ -46,7 +46,7 @@ public class ClientSetup {
              if (i == 1)
              {
                  CompoundTag tag = itemStack.getTag();
-                 if (tag != null && tag.contains("CustomPotionEffects", Tag.TAG_LIST)) {
+                 if (tag != null && tag.contains(PotionUtils.TAG_CUSTOM_POTION_EFFECTS, Tag.TAG_LIST)) {
                      return PotionUtils.getColor(PotionUtils.getCustomEffects(itemStack.getTag()));
                  }
                  return 0x55AAFF;

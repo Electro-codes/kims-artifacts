@@ -101,25 +101,30 @@ public class ServerPotionBagManager {
         bag.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler ->
         {
             //filter allowed items to only items extending potionitem
-            if (!(handler.getStackInSlot(0).getItem() instanceof PotionItem && handler.getStackInSlot(1).getItem() instanceof PotionItem)) return;
+            if (!(handler.getStackInSlot(0).getItem() instanceof PotionItem
+                    && handler.getStackInSlot(1).getItem() instanceof PotionItem
+                    && handler.getStackInSlot(2).getItem() instanceof PotionItem)) return;
 
             //get mobeffects for each of the two potion slots (third is WIP)
             List<MobEffectInstance> i1 = PotionUtils.getMobEffects(handler.getStackInSlot(0));
             List<MobEffectInstance> i2 = PotionUtils.getMobEffects(handler.getStackInSlot(1));
+            List<MobEffectInstance> i3 = PotionUtils.getMobEffects(handler.getStackInSlot(2));
 
 
             //new concoction instance
             ItemStack out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
             //add custom effects through forge's api for custom effects
-            PotionUtils.setCustomEffects(out, PotionUtil.Mix.mix(i1, i2));
+            PotionUtils.setCustomEffects(out, PotionUtil.Mix.mix(PotionUtil.Mix.mix(i1, i2), i3));
             //add concoction metadata (not used for anything yet but may be useful later)
             out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
             //add or subtract items
-            handler.insertItem(2, out, false);
+            handler.insertItem(3, out, false);
             handler.extractItem(0, 1, false);
             handler.extractItem(1, 1, false);
+            handler.extractItem(2, 1, false);
             handler.insertItem(0, Items.GLASS_BOTTLE.getDefaultInstance(), false);
             handler.insertItem(1, Items.GLASS_BOTTLE.getDefaultInstance(), false);
+            handler.insertItem(2, Items.GLASS_BOTTLE.getDefaultInstance(), false);
 
             //sync menu/itemhandler changes to menu if its open
             if (p.containerMenu instanceof PotionBagMenu menu)

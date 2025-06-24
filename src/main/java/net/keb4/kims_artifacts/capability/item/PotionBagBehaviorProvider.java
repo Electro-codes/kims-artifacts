@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 public class PotionBagBehaviorProvider implements ICapabilitySerializable<CompoundTag> {
     private final PotionBagBehavior potionBagBehavior = new PotionBagBehavior();
-    private final ItemStackHandler itemHandler = new ItemStackHandler(4);
+    private final ItemStackHandler itemHandler = new ItemStackHandler(6);
 
     private final LazyOptional<IPotionBagBehavior> potionBagOptional = LazyOptional.of(() -> potionBagBehavior);
     private final LazyOptional<IItemHandler> itemHandlerOptional = LazyOptional.of(() -> itemHandler);
