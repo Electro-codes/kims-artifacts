@@ -1,18 +1,15 @@
 package net.keb4.kims_artifacts.system.artifact.potion.application;
 
-import net.keb4.kims_artifacts.Main;
-import net.keb4.kims_artifacts.system.artifact.potion.PotionUtil;
+import net.keb4.kims_artifacts.system.artifact.potion.PotionSysUtil;
 import net.keb4.kims_artifacts.util.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -66,7 +63,7 @@ public class TippedWeaponEventHandler {
                 List<Component> toBeAdded = new ArrayList<>();
                 toBeAdded.add(Component.literal("Tipped Weapon").withStyle(ChatFormatting.AQUA));
                 toBeAdded.add(Component.literal("Uses: " + t.getCompound(NBTHelper.TIPPED_WEAPON_LOC).getInt("Uses")));
-                PotionUtil.appendTooltipWithoutApplied(instances, toBeAdded, 1);
+                PotionSysUtil.appendTooltipWithoutApplied(instances, toBeAdded, 1);
                 event.getToolTip().addAll(2, toBeAdded);
             }
         }

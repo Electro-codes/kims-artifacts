@@ -14,9 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -100,10 +98,8 @@ public class ServerPotionBagManager {
         //if the bag has an inventory/is present (it definitely should)
         bag.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent((handler ->
         {
-            //filter allowed items to only items extending potionitem
-            if (!(handler.getStackInSlot(0).getItem() instanceof PotionItem
-                    && handler.getStackInSlot(1).getItem() instanceof PotionItem
-                    && handler.getStackInSlot(2).getItem() instanceof PotionItem)) return;
+            //filter allowed items to only items sp
+            if (!PotionSysUtil.Craft.isValid(handler)) return;
 
             //get mobeffects for each of the two potion slots (third is WIP)
             List<MobEffectInstance> i1 = PotionUtils.getMobEffects(handler.getStackInSlot(0));
@@ -112,11 +108,17 @@ public class ServerPotionBagManager {
 
 
             //new concoction instance
-            ItemStack out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
-            //add custom effects through forge's api for custom effects
-            PotionUtils.setCustomEffects(out, PotionUtil.Mix.mix(PotionUtil.Mix.mix(i1, i2), i3));
-            //add concoction metadata (not used for anything yet but may be useful later)
-            out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
+            ItemStack out = ItemStack.EMPTY;
+            if (handler.getStackInSlot(3).isEmpty()) {
+                out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
+                PotionUtils.setCustomEffects(out, PotionSysUtil.Mix.mix(PotionSysUtil.Mix.mix(i1, i2), i3));
+                out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
+            } else
+            {
+                out = handler.getStackInSlot(3);
+                PotionSysUtil.Craft.tipWeapon(out, new ItemStack[]{handler.getStackInSlot(0), handler.getStackInSlot(1), handler.getStackInSlot(2)});
+            }
+
             //add or subtract items
             handler.insertItem(3, out, false);
             handler.extractItem(0, 1, false);

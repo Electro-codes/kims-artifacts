@@ -15,6 +15,7 @@ import net.keb4.kims_artifacts.network.s2c.ScreenShakePacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRStrongExplosionCallbackPacket;
 import net.keb4.kims_artifacts.network.s2c.effects.SMRWeakExplosionCallbackPacket;
 import net.keb4.kims_artifacts.sound.SoundRegistry;
+import net.keb4.kims_artifacts.system.artifact.potion.PotionSysUtil;
 import net.keb4.kims_artifacts.system.artifact.potion.ServerPotionBagManager;
 import net.keb4.kims_artifacts.util.CurioHelper;
 import net.keb4.kims_artifacts.util.ExplosionHelper;
@@ -134,10 +135,7 @@ public class ServerPacketHandlers {
         {
             ItemStack stack = message.stack;
 
-            if (!(menu.getSlot(0).getItem().getItem() instanceof PotionItem && menu.getSlot(1).getItem().getItem() instanceof PotionItem)) {
-                Main.LOGGER.error("Invalid recipe!");
-                return;
-            }
+            if (!PotionSysUtil.Craft.isValid(menu)) return;
 
             if (!(stack.getItem() instanceof PotionBagItem)) {
                 Main.LOGGER.error("Item is not a potionbagitem!");
@@ -145,7 +143,6 @@ public class ServerPacketHandlers {
             }
             ServerPotionBagManager.scheduleNewMix(sender, stack);
         }
-
     }
 
     public static void handleOpenPotionBagPacket(OpenPotionBagPacket message, Supplier<NetworkEvent.Context> contextSupplier)
