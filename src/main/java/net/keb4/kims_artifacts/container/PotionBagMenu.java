@@ -33,13 +33,13 @@ public class PotionBagMenu extends AbstractContainerMenu {
         }
     };
 
-
+    private ItemStack bag;
     public PotionBagMenu(int pContainerId, Inventory playerInv, ItemStack potionBag) {
         super(MenuRegistry.POTION_BAG_MENU.get(), pContainerId);
         this.playerInv = playerInv;
         this.bag = potionBag;
 
-        buildSlots(this.bag.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(new ItemStackHandler(4)));
+        buildSlots((new ItemStackHandler(6)));
         // Add player inventory slots
         // Player inventory (main 3 rows)
         //not my code ai got this for me :D
@@ -58,7 +58,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
 
     private int progress = 200;
 
-    private ItemStack bag;
+    
     private final Inventory playerInv;
 
     @Override
