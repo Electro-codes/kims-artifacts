@@ -24,6 +24,7 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,21 +74,21 @@ public class PotionSysUtil {
          * @apiNote Kim you can add your own potion mixing logic in here, mine kinda sucks I didn't spend too much time on it
          * **/
         public static List<MobEffectInstance> mix(List<MobEffectInstance> target, List<MobEffectInstance> addent) {
-            List<MobEffectInstance> out = new ArrayList<>();
-            for (MobEffectInstance t : target)
-            {
-                for (MobEffectInstance e : addent)
-                {
-                    if (e.getEffect() == t.getEffect())
-                    {
-                        out.add(new MobEffectInstance(e.getEffect(), e.getDuration() + t.getDuration(), t.getAmplifier()));
-                    } else
-                    {
-                        out.add(new MobEffectInstance(t));
-                    }
-                }
+            Map<MobEffect, MobEffectInstance> effectMap = new HashMap<>();
+            // Add all from a
+            for (MobEffectInstance inst : target) {
+                effectMap.put(inst.getEffect(), inst);
             }
-            return out;
+            // Add/merge all from b
+            for (MobEffectInstance inst : addent) {
+                effectMap.merge(inst.getEffect(), inst, (oldInst, newInst) -> {
+                    // Merge logic: keep higher amplifier, sum durations
+                    int amplifier = Math.max(oldInst.getAmplifier(), newInst.getAmplifier());
+                    int duration = oldInst.getDuration() + newInst.getDuration();
+                    return new MobEffectInstance(inst.getEffect(), duration, amplifier);
+                });
+            }
+            return new ArrayList<>(effectMap.values());
         }
     }
 
