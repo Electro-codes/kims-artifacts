@@ -9,6 +9,7 @@ import net.keb4.kims_artifacts.client.renderer.artifact.AlchemistBagRenderer;
 import net.keb4.kims_artifacts.client.renderer.artifact.SMRRenderer;
 import net.keb4.kims_artifacts.config.CommonConfig;
 import net.keb4.kims_artifacts.container.MenuRegistry;
+import net.keb4.kims_artifacts.entity.EntityRegistry;
 import net.keb4.kims_artifacts.item.ItemRegistry;
 import net.keb4.kims_artifacts.item.enchantment.EnchantmentRegistry;
 import net.keb4.kims_artifacts.network.PacketNetwork;
@@ -60,6 +61,7 @@ public class Main
         EnchantmentRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
         MenuRegistry.register(modEventBus);
+        EntityRegistry.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

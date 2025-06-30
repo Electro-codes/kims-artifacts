@@ -39,7 +39,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
         this.playerInv = playerInv;
         this.bag = potionBag;
 
-        buildSlots(this.bag.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(new ItemStackHandler(4)));
+        buildSlots(this.bag.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(new ItemStackHandler(6)));
         // Add player inventory slots
         // Player inventory (main 3 rows)
         //not my code ai got this for me :D

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kims_artifacts:item/lingeringconcoction",
+    "layer1": "kims_artifacts:item/lingeringconcoction_overlay"
+  }
+}

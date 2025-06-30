@@ -15,6 +15,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -113,13 +114,20 @@ public class ServerPotionBagManager {
                 out = new ItemStack(ItemRegistry.CONCOCTION_ITEM.get());
                 PotionUtils.setCustomEffects(out, PotionSysUtil.Mix.mix(PotionSysUtil.Mix.mix(i1, i2), i3));
                 out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
-            } else
+            } else if (handler.getStackInSlot(3).getItem() == Items.GUNPOWDER) {
+                out = new ItemStack(ItemRegistry.LINGERING_CONCOCTION_ITEM.get());
+                PotionUtils.setPotion(out, Potions.WATER); // or Potions.AWKWARD
+                PotionUtils.setCustomEffects(out, PotionSysUtil.Mix.mix(PotionSysUtil.Mix.mix(i1, i2), i3));
+                out.getOrCreateTag().put(NBTHelper.CONCOCTION_METADATA, new CompoundTag());
+            }
+            else
             {
                 out = handler.getStackInSlot(3);
                 PotionSysUtil.Craft.tipWeapon(out, new ItemStack[]{handler.getStackInSlot(0), handler.getStackInSlot(1), handler.getStackInSlot(2)});
             }
 
             //add or subtract items
+            handler.extractItem(3, 1, false);
             handler.insertItem(3, out, false);
             handler.extractItem(0, 1, false);
             handler.extractItem(1, 1, false);
