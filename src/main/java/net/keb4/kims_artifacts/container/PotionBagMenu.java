@@ -33,7 +33,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
         }
     };
 
-
+    private ItemStack bag;
     public PotionBagMenu(int pContainerId, Inventory playerInv, ItemStack potionBag) {
         super(MenuRegistry.POTION_BAG_MENU.get(), pContainerId);
         this.playerInv = playerInv;
@@ -58,7 +58,7 @@ public class PotionBagMenu extends AbstractContainerMenu {
 
     private int progress = 200;
 
-    private ItemStack bag;
+    
     private final Inventory playerInv;
 
     @Override
