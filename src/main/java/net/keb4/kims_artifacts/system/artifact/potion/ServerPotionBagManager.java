@@ -123,7 +123,7 @@ public class ServerPotionBagManager {
             else
             {
                 out = handler.getStackInSlot(3);
-                PotionSysUtil.Craft.tipWeapon(out, new ItemStack[]{handler.getStackInSlot(0), handler.getStackInSlot(1), handler.getStackInSlot(2)});
+                PotionSysUtil.Craft.tipWeapon(out, handler.getStackInSlot(0), handler.getStackInSlot(1), handler.getStackInSlot(2));
             }
 
             //add or subtract items

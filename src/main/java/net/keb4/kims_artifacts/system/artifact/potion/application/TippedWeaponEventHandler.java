@@ -35,18 +35,21 @@ public class TippedWeaponEventHandler {
             ItemStack item = player.getItemBySlot(EquipmentSlot.MAINHAND);
             if (item.getOrCreateTag().contains(NBTHelper.TIPPED_WEAPON_LOC))
             {
-                if (item.getOrCreateTag().getCompound(NBTHelper.TIPPED_WEAPON_LOC).getInt("Uses") <= 0)
-                {
-                    item.getOrCreateTag().remove(NBTHelper.TIPPED_WEAPON_LOC);
-                    return;
-                }
                 List<MobEffectInstance> efx = PotionUtils.getCustomEffects(item.getOrCreateTag().getCompound(NBTHelper.TIPPED_WEAPON_LOC));
                 for (MobEffectInstance e: efx)
                 {
                     event.getEntity().addEffect(e);
                 }
 
-                item.getOrCreateTag().getCompound(NBTHelper.TIPPED_WEAPON_LOC).putInt("Uses",item.getOrCreateTag().getCompound(NBTHelper.TIPPED_WEAPON_LOC).getInt("Uses") - 1);
+                CompoundTag tipped = item.getOrCreateTag().getCompound(NBTHelper.TIPPED_WEAPON_LOC);
+                int uses = tipped.getInt("Uses") - 1;
+                if (uses <= 0) {
+                    // Remove the tipped tag immediately when out of uses
+                    item.getTag().remove(NBTHelper.TIPPED_WEAPON_LOC);
+                } else {
+                    tipped.putInt("Uses", uses);
+                    item.getTag().put(NBTHelper.TIPPED_WEAPON_LOC, tipped);
+                }
             }
         }
     }

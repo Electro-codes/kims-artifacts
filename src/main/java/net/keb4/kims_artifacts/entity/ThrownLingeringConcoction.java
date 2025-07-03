@@ -54,7 +54,7 @@ public class ThrownLingeringConcoction extends ThrownPotion {
          }
       }
    }
-   // INSANELY RETARDED, i had to copy this shit cus the visibility for it had to be fucking private for no reason,
+   // INSANELY RETARDED, i had to copy this shit cus the visibility for it had to be aids for no reason,
    // Hacky as fuck, but it works ig
    private void makeAreaOfEffectCloud(ItemStack pStack, Potion pPotion) {
       AreaEffectCloud areaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());

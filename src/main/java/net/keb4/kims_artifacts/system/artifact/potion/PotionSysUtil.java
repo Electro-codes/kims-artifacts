@@ -136,18 +136,17 @@ public class PotionSysUtil {
         }
 
         //tips a weapon with an amount of concoctions
-        public static void tipWeapon(ItemStack stack, ItemStack... concoction)
-        {
+        public static void tipWeapon(ItemStack stack, ItemStack... concoction) {
             if (!(stack.getItem() instanceof SwordItem)) return;
             CompoundTag t = stack.getOrCreateTag();
             CompoundTag root = new CompoundTag();
             List<ItemStack> concoctions = Arrays.stream(concoction).toList();
             ListTag allEfx = new ListTag();
 
-            for (ItemStack c : concoctions)
-            {
-                ListTag tx = c.getOrCreateTag().getList(PotionUtils.TAG_CUSTOM_POTION_EFFECTS, Tag.TAG_COMPOUND);
-                allEfx.addAll(tx);
+            for (ItemStack c : concoctions) {
+                for (MobEffectInstance effect : PotionUtils.getMobEffects(c)) {
+                    allEfx.add(effect.save(new CompoundTag()));
+                }
             }
             root.put(PotionUtils.TAG_CUSTOM_POTION_EFFECTS, allEfx);
             root.putInt("Uses", CommonConfig.tippedWeaponUses);
